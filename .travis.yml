@@ -1,0 +1,22 @@
+
+language: node_js
+
+node_js:
+  - "7"
+env:
+  - DJANGO_VERSION=2.1.2 DB=postgresql DISPLAY=:99.0 CHROME_BIN=/usr/bin/google-chrome DJANGO_HOST=http://127.0.0.1:8000/api
+
+install:
+  - cd frontend
+  - npm install
+  - pyenv global 3.6.7
+  - cd ../
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+script:
+  - npm run es-lint
+  - npm run build
+  - npm test
+
+
