@@ -1,18 +1,22 @@
+matrix:
 
-language: node_js
+  include:
+    - language: python
+      python: 3.6.7
+      before-script:
+        -pip install -r requirements.txt
 
-node_js:
-  - "7"
+    - language: node_js
+      node_js:
+        - "7"
 
-install:
-  - cd frontend
-  - npm install
-  - cd ../
-  - pip install -r requirements.txt
+      install:
+        - cd frontend
+        - npm install
+        - cd ../
+        - pip install -r requirements.txt
 
-script:
-  - npm run es-lint
-  - npm run build
-  - npm test
-
-
+      script:
+        - npm run es-lint
+        - npm run build
+        - npm test
