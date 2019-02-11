@@ -4,7 +4,7 @@ matrix:
     - language: python
       python: 3.6.7
       before-script:
-        -pip install -r requirements.txt
+        -pip3 install -r requirements.txt
 
     - language: node_js
       node_js:
