@@ -5,7 +5,8 @@ matrix:
       python: 3.6.7
       before-script:
         -pip3 install -r requirements.txt
-      # script:
+      script:
+        - echo "no tests to run for now"
 
 
     - language: node_js
@@ -16,7 +17,7 @@ matrix:
         - cd frontend
         - npm install
 
-      # script:
-      #   - npm run es-lint
-      #   - npm run build
-      #   - npm test
+      script:
+        - npm run es-lint
+        - npm run build
+        - npm test
