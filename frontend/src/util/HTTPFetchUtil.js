@@ -14,7 +14,9 @@ const getHeader = (requireAuth) => {
     }
 }
 
-const url = (window.location.hostname === "localhost" ? "http://localhost:8000" : "https://radiant-savannah-77591.herokuapp.com");
+const PROD_URL = "https://radiant-savannah-77591.herokuapp.com";
+const LOCALHOST = "http://localhost:8000";
+const url = (window.location.hostname === "localhost" ? LOCALHOST : PROD_URL);
 
 export default class HTTPFetchUtil {
 
