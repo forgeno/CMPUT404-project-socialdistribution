@@ -110,7 +110,7 @@ class Profile extends Component {
                     <div className="profile">
                         <br/>
                         <ProfileBubble
-                        profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}/>
+                        profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"} profilePicture="None Set" username = {this.state.username}/>
                         <br/><div className="profile-username">{this.state.profiledata.displayName}</div>
                             <Button positive>
                                 <Icon name= "user plus" />
