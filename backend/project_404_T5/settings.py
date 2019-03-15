@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '9r1hgxrq$l_5m&eue5w_s(r49bmy11qcceg)1k@=(sbi@g_i6w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['radiant-savannah-77591.herokuapp.com']
 
 
 # Application definition
@@ -130,11 +131,12 @@ USE_TZ = True
 # these 2 URL should be changed when depolying
 # this URL is to indicate the host for frontend so backend would not forward the request 
 # to other servers for node to node connection
-FRONTEND_URL = "http://testserver/"
+FRONTEND_URL = "https://git-friends-404.herokuapp.com/"
 # this URL is to indicate what host of the backend is
-BACKEND_URL = "http://127.0.0.1:8000/"
+BACKEND_URL = "radiant-savannah-77591.herokuapp.com"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+django_heroku.settings(locals(), test_runner=False)
