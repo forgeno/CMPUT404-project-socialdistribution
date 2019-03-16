@@ -93,6 +93,18 @@ class App extends Component {
 	getComponent() {
 		// if(window.location.pathname !== "/") {
 			return(
+				null
+			)
+		// }
+		// else {
+		// 	return (<div>{null}</div>)
+		// }
+	}
+
+	render() {
+		console.log(window.location.pathname);
+		return (
+			<BrowserRouter>
 				<AppContainer>
 					<Navigation>
 						<SideNav
@@ -152,19 +164,7 @@ class App extends Component {
 						<Route component={NotFound} />
 					</Switch>
 					</Body>
-			  </AppContainer>
-			)
-		// }
-		// else {
-		// 	return (<div>{null}</div>)
-		// }
-	}
-
-	render() {
-		console.log(window.location.pathname);
-		return (
-			<BrowserRouter>
-				{this.getComponent()}
+				</AppContainer>
         	</BrowserRouter>
 		);
   	}
