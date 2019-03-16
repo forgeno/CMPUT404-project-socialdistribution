@@ -75,6 +75,7 @@ class App extends Component {
 		super(props);
 		this.state = {
 		};
+		this.getNavBar = this.getNavBar.bind(this);
 	}
 
 	GetAuthorIdString(){
@@ -90,23 +91,10 @@ class App extends Component {
 		return authorIdString
 	}
 
-	getComponent() {
-		// if(window.location.pathname !== "/") {
+	getNavBar() {
+		if(window.location.pathname !== "/") {
 			return(
-				null
-			)
-		// }
-		// else {
-		// 	return (<div>{null}</div>)
-		// }
-	}
-
-	render() {
-		console.log(window.location.pathname);
-		return (
-			<BrowserRouter>
-				<AppContainer>
-					<Navigation>
+				<Navigation>
 						<SideNav
 							defaultSelectedPath="1"
 							theme={theme}
@@ -154,6 +142,19 @@ class App extends Component {
 						</Link>
 						</SideNav>
 					</Navigation>
+			)
+		}
+		else {
+			return (<div>{null}</div>)
+		}
+	}
+
+	render() {
+		console.log(window.location.pathname);
+		return (
+			<BrowserRouter>
+				<AppContainer>
+					{this.getNavBar()}
 					<Body>
 						<Switch>
 						<Route exact path="/" component={Login}/>
