@@ -96,8 +96,9 @@ class Author extends Component {
               ];
 
 	render() {
+        console.log("author.jsx")
         return(	
-            <div className="pusher">
+            <div className="pusherx">
                 <div className="profile">
                     <ProfileBubble
                         username={this.state.displayName}

@@ -123,7 +123,7 @@ class Stream extends Component {
 	render() {
 	const storeItems = store.getState().loginReducers;
 	return(	
-		<div className="pusher">
+		<div className="pusherx">
 			<Feed>
 				{this.state.events}
 			</Feed>

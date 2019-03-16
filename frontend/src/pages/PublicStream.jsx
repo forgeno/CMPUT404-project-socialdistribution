@@ -7,7 +7,7 @@ class PublicStream extends Component {
 	render() {
 		const storeItems = store.getState().loginReducers;
 		return(	
-			<div className="pusher">
+			<div className="pusherx">
 				<StreamFeed storeItems={storeItems} urlPath="/api/posts/"/>
 				<div className="modalButtonPosition">
 					<CreatePostModal storeItems={storeItems} />

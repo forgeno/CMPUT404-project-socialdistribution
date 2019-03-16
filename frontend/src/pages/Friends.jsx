@@ -5,7 +5,7 @@ class Friends extends Component {
 
 	render() {
 	return(	
-		<div className="pusher">
+		<div className="pusherx">
 			<h1> This is where we put the stuff for the Friends page</h1>
 		</div>
 	    )
