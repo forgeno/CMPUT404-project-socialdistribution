@@ -12,26 +12,15 @@ const AppContainer = styled(BaseAppContainer)`
 
 export default function withAuth(Component, navId) {
     return class extends Component {
-        constructor(props) {
-            super(props);
-        }
-
-        // shouldComponentUpdate(nextState) {
-        //     return false;
-        // }
-
-
         render() {
             let isLoggedIn = store.getState().loginReducers.isLoggedIn || Cookies.get("userPass");
             if (isLoggedIn) {
                 return (
                     <AppContainer>
-
                         <SideBar navId={navId}/>
                         <Body>
-                        <Component {...this.props} />
+                            <Component {...this.props} />
                         </Body>
-
                     </AppContainer>
                 );
             } else {

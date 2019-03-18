@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import {Link} from "react-router-dom";
 import './styles/SideBar.css';
 import store from "../store/index";
 import { withRR4 } from "react-sidenav/withRR4";
@@ -12,14 +11,9 @@ import {
   ExampleBody as Body
 } from "../containers";
 
-import {Tab} from 'semantic-ui-react';
 import utils from "../util/utils";
 
 
-const AppContainer = styled(BaseAppContainer)`
-  height: calc(100vh);
-  width: 100vw;
-`;
 
 const Navigation = styled(BaseNavigation)`
   background: #303641;
@@ -28,13 +22,6 @@ const Navigation = styled(BaseNavigation)`
   letter-spacing: 2px;
   width: 100px;
   line-height: 22px;
-`;
-
-const IconCnt = styled.div`
-  color: #FFF;
-  display: flex;
-  justify-content: center;
-  aligh-items: center;
 `;
 
 const Nav = styled(BaseNav)`
@@ -54,22 +41,9 @@ const Text = styled.div`
 
 const SideNav = withRR4();
 
-class SideBar extends Component {	
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedPath: "2"
-		};
-	}
-
-	onItemSelection = arg => {
-		// this.setState({ selectedPath: arg.path });
-		console.log("on item select");
-  };
+class SideBar extends Component {
 
 	render() {
-		console.log(this.state);
 		let profilePath = "",
 			fullAuthorId = "";
 		if(store.getState().loginReducers.userId) {
@@ -77,14 +51,12 @@ class SideBar extends Component {
 			fullAuthorId = store.getState().loginReducers.userId;
 		}
 
-
 		return(
 			<Navigation>
           <SideNav
 			  basePath='/'
             defaultSelectedPath="stream"
             theme={theme}
-            onItemSelection={this.onItemSelection}
           >
 		  	<Nav
 				id={profilePath}
@@ -96,7 +68,7 @@ class SideBar extends Component {
               <Text>Profile</Text>
             </Nav>
             <Nav id="stream">
-              <Text>Streamx</Text>
+              <Text>Stream</Text>
             </Nav>
             <Nav id="friends">
               <Text>Friends</Text>
