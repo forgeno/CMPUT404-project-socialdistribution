@@ -29,6 +29,9 @@ import { Title, AppContainer as BaseAppContainer,
   ExampleBody as Body } from "./containers";
 import store from "./store/index";
 import withAuth from "./components/HigherOrder/withAuth";
+import A from "./pages/A";
+import B from "./pages/B";
+import C from "./pages/C";
 
 
 const AppContainer = styled(BaseAppContainer)`
@@ -58,16 +61,21 @@ class App extends Component {
 			<BrowserRouter>
 				{/*<AppContainer>*/}
 					{/*<SideBar/>*/}
-					{/*<Body>*/}
+					<Body>
 						<Switch>
 						<Route exact path="/" component={Login}/>
 						<Route exact path="/author/:authorId" component={withAuth(Author)}/>
 						<Route exact path ="/stream" component={withAuth(Stream)}/>
 						<Route exact path ="/friends" component={withAuth(Friends)}/>
 						<Route exact path ="/public" component={withAuth(PublicStream)}/>
+						<Route exact path ="/aa" component={A}/>
+						<Route exact path ="/bb" component={B}/>
+						<Route exact path ="/cc" component={C}/>
 						<Route component={NotFound} />
+
+
 					</Switch>
-					{/*</Body>*/}
+					</Body>
 				{/*</AppContainer>*/}
         	</BrowserRouter>
 		);

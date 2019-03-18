@@ -10,14 +10,14 @@ const AppContainer = styled(BaseAppContainer)`
   height: calc(100vh - 40px);
 `;
 
-export default function withAuth(Component) {
+export default function withAuth(Component, navId) {
     return class extends Component {
         constructor(props) {
             super(props);
         }
-        //
+
         // shouldComponentUpdate(nextState) {
-        //     return true;
+        //     return false;
         // }
 
 
@@ -27,7 +27,7 @@ export default function withAuth(Component) {
                 return (
                     <AppContainer>
 
-                        <SideBar />
+                        <SideBar navId={navId}/>
                         <Body>
                         <Component {...this.props} />
                         </Body>
