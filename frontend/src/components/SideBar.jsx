@@ -76,9 +76,6 @@ class SideBar extends Component {
 		  	<Nav id="public">
               <Text>Public</Text>
             </Nav>
-			  <Nav id="bb">
-              <Text>test link</Text>
-            </Nav>
 			  <Nav id="cc">
               <Text>logout</Text>
             </Nav>

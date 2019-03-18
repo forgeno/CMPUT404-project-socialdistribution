@@ -6,6 +6,7 @@ import ProfileBubble from "../components/ProfileBubble";
 import AboutProfileComponent from "../components/AboutProfileComponent";
 import './styles/Author.css';
 import utils from "../util/utils";
+import store from "../store";
 
 
 class Author extends Component {
@@ -27,9 +28,15 @@ class Author extends Component {
 		this.fetchProfile = this.fetchProfile.bind(this);
 	}
 
+	static getDerivedStateFromProps(props) {
+        return ({
+            fullAuthorId: props.location.state ? props.location.state.fullAuthorId : store.getState().loginReducers.userId
+        });
+    }
+
 	fetchProfile() {
         //todo deal with other hosts
-        const hostUrl = "/api/author/"+ utils.GetShortAuthorId(this.props.location.state.fullAuthorId),
+        const hostUrl = "/api/author/"+ utils.GetShortAuthorId(this.state.fullAuthorId),
             requireAuth = true;
         HTTPFetchUtil.getRequest(hostUrl, requireAuth)
             .then((httpResponse) => {
@@ -55,13 +62,13 @@ class Author extends Component {
     }
 
     componentDidMount(){
-        this.fetchProfile();
+        this.fetchProfile(this.state.fullAuthorId);
     }
 
 	getAboutPane() {
         return (
             <AboutProfileComponent
-                fullAuthorId={this.props.location.state.fullAuthorId}
+                fullAuthorId={this.state.fullAuthorId}
                 profile_id={this.state.id}
                 host={this.state.host}
                 displayName={this.state.displayName}
@@ -95,7 +102,7 @@ class Author extends Component {
               ];
 
 	render() {
-        return(	
+        return(
             <div className="pusher">
                 <div className="profile">
                     <ProfileBubble
@@ -107,7 +114,7 @@ class Author extends Component {
                         {this.state.displayName}
                     </div>
                     <button id="addAuthorButton" className="positive ui button">
-                        <i className="user plus icon"></i>
+                        <i className="user plus icon"/>
                         Request Friend
                     </button>
                 </div>
