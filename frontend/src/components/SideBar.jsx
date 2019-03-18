@@ -53,34 +53,41 @@ class SideBar extends Component {
 
 		return(
 			<Navigation>
-          <SideNav
-			  basePath='/'
-            defaultSelectedPath="stream"
-            theme={theme}
-          >
-		  	<Nav
-				id={profilePath}
-			  	payload={{
-					fullAuthorId: fullAuthorId
-			  	}}
-				className="item sideBarProfile"
-			>
-              <Text>Profile</Text>
-            </Nav>
-            <Nav id="stream">
-              <Text>Stream</Text>
-            </Nav>
-            <Nav id="friends">
-              <Text>Friends</Text>
-            </Nav>
-		  	<Nav id="public">
-              <Text>Public</Text>
-            </Nav>
-			  <Nav id="cc">
-              <Text>logout</Text>
-            </Nav>
-          </SideNav>
-        </Navigation>
+                <SideNav
+			        basePath='/'
+                    defaultSelectedPath="stream"
+                    theme={theme}
+                >
+                    <Nav
+                        id={profilePath}
+                        payload={{
+                            fullAuthorId: fullAuthorId
+                        }}
+                        className="item sideBarProfile"
+                    >
+                        <span className={"ui circular tiny bordered centered image"}>
+                            <img alt="It's you!" src={require('../assets/images/default.png')}/>
+                        </span>
+                        <Text>Profile</Text>
+                    </Nav>
+                    <Nav id="stream">
+                        <i className="tint icon"/>
+                        <Text>Stream</Text>
+                    </Nav>
+                    <Nav id="friends">
+                        <i className="users icon"/>
+                        <Text>Friends</Text>
+                    </Nav>
+                    <Nav id="public">
+                        <i className="globe icon"/>
+                        <Text>Public</Text>
+                    </Nav>
+                    <Nav id="cc">
+                        <i className="sign-out icon"/>
+                        <Text>logout</Text>
+                    </Nav>
+                </SideNav>
+            </Navigation>
 		);
 	}
 }
