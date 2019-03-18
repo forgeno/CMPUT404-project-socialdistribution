@@ -82,7 +82,7 @@ class SideBar extends Component {
                         <i className="globe icon"/>
                         <Text>Public</Text>
                     </Nav>
-                    <Nav id="">
+                    <Nav id="logout">
                         <i className="sign-out icon"/>
                         <Text>logout</Text>
                     </Nav>

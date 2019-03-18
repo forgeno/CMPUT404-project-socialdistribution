@@ -14,6 +14,9 @@ export default function loginReducers(state=initialState, action) {
                 username: action.payload.username,
                 password: action.payload.password
               });
+        case "SEND_LOGOUT":
+            console.log("send logout reducer")
+            return Object.assign({}, state, initialState);
         default:
             return state;
     }

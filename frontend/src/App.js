@@ -9,6 +9,7 @@ import NotFound from "./components/NotFound";
 import {Route, Switch, BrowserRouter} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import withAuth from "./components/HigherOrder/withAuth";
+import Logout from "./pages/Logout";
 
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
 					<Route exact path ="/stream" component={withAuth(Stream)}/>
 					<Route exact path ="/friends" component={withAuth(Friends)}/>
 					<Route exact path ="/public" component={withAuth(PublicStream)}/>
+					<Route exact path ="/logout" component={Logout}/>
 					<Route component={NotFound} />
 				</Switch>
         	</BrowserRouter>
