@@ -66,19 +66,6 @@ class SideBar extends Component {
 		super(props);
 		this.state = {
 		};
-	}	
-
-	GetAuthorIdString(){
-		let authorIdString = "";
-		try{
-			authorIdString = "/author/"+store.getState().loginReducers.userId.split("/")[4];
-		}
-		catch(e){
-			console.log("Error: Could not retrieve user Id in profile");
-			return e
-		}
-		console.log(authorIdString);
-		return authorIdString
 	}
 
 	render() {
@@ -138,9 +125,9 @@ class SideBar extends Component {
 						{/* <Tab panes={panes} /> */}
 					{/* </Body> */}
 			  </AppContainer>
-					// <div className="ui left fixed vertical inverted sidebar labeled icon menu blue visible sideBarMenu">						
+					// <div className="ui left fixed vertical inverted sidebar labeled icon menu blue visible sideBarMenu">
 					// 	<Link to={this.GetAuthorIdString()} className="item sideBarProfile">
-					// 		<span className={"ui circular tiny bordered centered image"}>						
+					// 		<span className={"ui circular tiny bordered centered image"}>
 					// 			<img alt="It's you!" src={require('../assets/images/default.png')}/>
 					// 		</span>
 					// 	  	<figcaption>Profile</figcaption>
