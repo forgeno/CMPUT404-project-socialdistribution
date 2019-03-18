@@ -48,9 +48,9 @@ class App extends Component {
 		};
 	}
 
-	// shouldComponentUpdate() {
-    //     return false;
-	// }
+	shouldComponentUpdate() {
+        return false;
+	}
 
 	render() {
 		console.log(window.location.pathname);
