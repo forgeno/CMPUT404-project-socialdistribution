@@ -4,7 +4,7 @@ import * as LoginActions from "../actions/LoginActions";
 import { Redirect } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { Input, Message } from 'semantic-ui-react'
-import "./styles/LoginInputText.css"
+
 
 class LoginFormComponent extends Component {	
 
@@ -77,7 +77,6 @@ class LoginFormComponent extends Component {
 const mapStateToProps = state => {
     return {
         isValidated: state.loginReducers.isLoggedIn
-        
     }
 }
 
