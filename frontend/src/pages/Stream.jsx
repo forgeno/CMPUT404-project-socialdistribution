@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
-import 'semantic-ui-css/semantic.min.css';
-import PostInput from '../components/PostInput';
+import StreamFeed from '../components/StreamFeed';
+import store from '../store/index.js';
+import './styles/Stream.css';
 
 class Stream extends Component {	
-
-	constructor(props) {
-		super(props);
-		this.state = {
-		}
-	}	
-
+	
 	render() {
-	return(	
-		<div className="pusher">
-			<h1> This is where we put the stuff for the Stream page</h1>
-			<PostInput/>
-		</div>
-	    )
+		const storeItems = store.getState().loginReducers;
+		return(	
+			<div className="pusher">
+				<StreamFeed storeItems={storeItems} urlPath="/api/author/posts/" />
+			</div>
+			)
     }
 }
-
-
 
 export default Stream;

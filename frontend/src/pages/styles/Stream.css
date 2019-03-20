@@ -1,0 +1,8 @@
+.ui.feed {
+	width: 65vw;
+	height: 75vh;
+	position: relative;
+	left: 15%;
+	overflow-y: scroll;
+	padding-top: 1%;
+}

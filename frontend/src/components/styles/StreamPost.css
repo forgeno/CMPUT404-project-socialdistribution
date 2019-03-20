@@ -1,0 +1,116 @@
+.ui.feed > .event {
+	padding-left: 4%;
+	max-width: 50vw;
+	background: rgba(255, 255, 255, 0.5);
+	border-radius: 2%;
+	margin-bottom: 10%;
+
+}
+ 
+.postContent {
+	width: 100%;
+}
+
+.categoryLabels {
+	margin-top: 3%;
+	padding: 1%;
+	border-top: 1px solid rgba(34,36,38,.15);
+}
+
+.ui.feed > .event :hover {
+	cursor: pointer;
+}
+
+.date {
+	max-width: 15vw;
+}
+
+.label {
+	max-width: 100%;
+}
+
+.ui.feed > .event > .label {
+	width: 10em;
+}
+
+.ui.feed > .event > .content .date.datetimeOfPost {
+	text-align: right;
+	position: relative;
+}
+
+.date {
+	margin-left: 75%;
+	float: right;
+	margin-right: 1%;
+}
+
+.title h3 {
+	color: #2185d0;
+	font-size: 2em;
+
+	text-shadow: 1px 1px 1px;
+	word-wrap: anywhere;
+}
+
+section.description {
+	font-weight: normal;
+	font-size: 2em;
+	margin-top: 5%;
+	line-height: 1em;
+	word-wrap: anywhere;
+	padding-bottom: 3%;
+}
+
+*, ::after, ::before {
+	box-sizing: initial !important;
+}
+
+.ui.feed > .event > .label img {
+	width: 50%;
+}
+
+
+.byAuthor {
+	font-weight: normal;
+	max-width: 40vw;
+}
+
+.extra.managePostButtons {
+	text-align: right;
+	float: right;
+	max-width: 40vw;
+	margin-bottom: 5%;
+}
+
+.modalHeader {
+	word-wrap: anywhere;
+}
+
+.profileBubbleInShowContent {
+	margin-right: 5%;
+}
+
+.titleInShowContent {
+	margin-top: 2%;
+	font-size: 2.5rem;
+	color: #2185d0;
+	text-shadow: 1px 1px 1px;
+}
+
+.descriptionInShowContent {
+	font-weight: normal;
+	margin-left: 5.8rem;
+	font-size: 0.9rem;
+}
+
+.byAuthorInShowContent {
+	margin-left: 9%;
+	font-size: 0.8rem;
+}
+
+.contentModalContent {
+	word-wrap: anywhere;
+	line-height: 0.8em;
+	margin-bottom: 4%;
+	font-size: 2em;
+}
