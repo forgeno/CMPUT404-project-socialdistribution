@@ -3,7 +3,8 @@ import { Feed, Modal, Label, Icon } from 'semantic-ui-react';
 import ReactMarkdown from 'react-markdown';
 import ProfileBubble from './ProfileBubble';
 import AnimatedButton from './AnimatedButton';
-import CreatePostModal from '../components/CreatePostModal';
+import CommentsOnPost from './CommentsOnPost';
+import CreatePostModal from './CreatePostModal';
 import Cookies from 'js-cookie';
 import store from '../store/index.js';
 import PropTypes from 'prop-types';
@@ -213,12 +214,14 @@ class StreamPost extends Component {
 					<section  className='contentModalContent'>
 						{this.contentRender(this.props.content, this.props.contentType)}
 					</section>
+					<CommentsOnPost comments={this.props.comments}/>
 					
-					</Modal.Content>
 					{this.categoryLabels()}
 					<span className="postID"> {this.props.postID} </span>
-					</Modal>
+					<span className="bottomOfContentModal"></span>
 					
+					</Modal.Content>
+					</Modal>
 					
 					<Modal
 					open={this.state.showDeleteModal}
@@ -244,6 +247,36 @@ class StreamPost extends Component {
 	}
 }
 
+// TODO: Remove this default comment when comments implemented
+StreamPost.defaultProps = {
+	comments: [
+		{ 	"author": {
+				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
+				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
+				"host": "http://git-friends.com/",
+				"displayName": "Greg Johnson",
+				"github": "http://github.com/gjohnson",
+			},
+			"comment": "THIS IS MY COMMENT",
+			"contentType": "text/markdown",
+			"published": "2015-03-09",
+			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah"
+		},
+		{ 	"author": {
+				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
+				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
+				"host": "http://git-friends.com/",
+				"displayName": "Kevin Johnson",
+				"github": "http://github.com/gjohnson",
+			},
+			"comment": "ANOTHER ONE",
+			"contentType": "text/markdown",
+			"published": "2015-03-09",
+			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah"
+		},
+	],
+}
+
 StreamPost.propTypes = {
 	postID: PropTypes.string.isRequired,
 	displayName: PropTypes.string.isRequired,
@@ -261,6 +294,9 @@ StreamPost.propTypes = {
 	
 	author: PropTypes.string.isRequired,
 	viewingUser: PropTypes.string,
+	
+	comments: PropTypes.array,
+	
 	deletePost: PropTypes.func.isRequired,
 	getPosts: PropTypes.func.isRequired,
 };
