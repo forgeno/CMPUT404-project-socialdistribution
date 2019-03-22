@@ -1,3 +1,9 @@
 .commentAvatar {
 	padding-left: 3%;
 }
+
+.ui.comments .comment > .avatar ~ .content {
+	margin-top: 2%;
+	margin-bottom: 3%;
+	margin-left: 4.5em;
+}

@@ -119,6 +119,10 @@ section.description {
 	font-size: 2em;
 }
 
+.contentModalContent img {
+	max-width: 100%;
+}
+
 .bottomOfContentModal {
 	padding: 3%;
 }
