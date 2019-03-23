@@ -9,6 +9,8 @@ import Cookies from 'js-cookie';
 import store from '../store/index.js';
 import PropTypes from 'prop-types';
 import TextTruncate from 'react-text-truncate'; 
+import { SemanticToastContainer} from 'react-semantic-toasts';
+import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import './styles/StreamPost.css';
 
 function categoryToLabel(category) {
@@ -127,6 +129,24 @@ class StreamPost extends Component {
 				iconForButton={"pencil icon"} 
 				buttonText={"EDIT"} 
 				clickFunction={this.openEditModal}/></div>);
+		
+		let $visibilityIcon;
+		switch(this.props.visibility) {
+			case "PUBLIC":
+				$visibilityIcon = "globe";
+				break;
+			case "FRIENDS":
+				$visibilityIcon = "user";
+				break;
+			case "FOAF":
+				$visibilityIcon = "users";
+				break;
+			case "PRIVATE":
+				$visibilityIcon = "setting";
+				break;
+			default:
+				$visibilityIcon = "help";
+		}
 				
 		return(
 			<Feed.Event>
@@ -142,12 +162,14 @@ class StreamPost extends Component {
 				<Feed.Content>
 					<div>
 						<Feed.Summary>
-							<span className="title"> <h3> 	<TextTruncate line={1} 
-																text={this.props.title} 
-																truncateText="..."
-															/>
+							<span className="title"> <h3> 	
+														<Icon name={$visibilityIcon} className="visibilityIcon"/>
+														<TextTruncate 
+															line={1} 
+															text={this.props.title} 
+															truncateText="..."
+														/>
 													</h3>
-								
 							</span>
 							<div className="byAuthor"> by: {this.props.displayName} </div>
 							
@@ -214,7 +236,11 @@ class StreamPost extends Component {
 					<section  className='contentModalContent'>
 						{this.contentRender(this.props.content, this.props.contentType)}
 					</section>
-					<CommentsOnPost comments={this.props.comments}/>
+					
+					<CommentsOnPost postID={this.props.postID} />
+					
+					{/* Container here so toast goes past modal*/} 
+					<SemanticToastContainer position="top-left"/>		
 					
 					{this.categoryLabels()}
 					<span className="postID"> {this.props.postID} </span>
@@ -247,36 +273,6 @@ class StreamPost extends Component {
 	}
 }
 
-// TODO: Remove this default comment when comments implemented
-StreamPost.defaultProps = {
-	comments: [
-		{ 	"author": {
-				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
-				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
-				"host": "http://git-friends.com/",
-				"displayName": "Greg Johnson",
-				"github": "http://github.com/gjohnson",
-			},
-			"comment": "THIS IS MY COMMENT",
-			"contentType": "text/markdown",
-			"published": "2015-03-09",
-			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah"
-		},
-		{ 	"author": {
-				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
-				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
-				"host": "http://git-friends.com/",
-				"displayName": "Kevin Johnson",
-				"github": "http://github.com/gjohnson",
-			},
-			"comment": "ANOTHER ONE",
-			"contentType": "text/markdown",
-			"published": "2015-03-09",
-			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah"
-		},
-	],
-}
-
 StreamPost.propTypes = {
 	postID: PropTypes.string.isRequired,
 	displayName: PropTypes.string.isRequired,
@@ -294,8 +290,6 @@ StreamPost.propTypes = {
 	
 	author: PropTypes.string.isRequired,
 	viewingUser: PropTypes.string,
-	
-	comments: PropTypes.array,
 	
 	deletePost: PropTypes.func.isRequired,
 	getPosts: PropTypes.func.isRequired,

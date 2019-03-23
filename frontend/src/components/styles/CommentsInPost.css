@@ -1,5 +1,10 @@
-.commentAvatar {
-	padding-left: 3%;
+.singleComment {
+	padding-right: 2%;
+}
+
+.profileBubbleInComment {
+	float: left;
+	padding-right: 2%;
 }
 
 .ui.comments .comment > .avatar ~ .content {
