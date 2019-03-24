@@ -31,10 +31,13 @@ class CreatePostModal extends Component {
 			visibility: this.props.visibility,
 			visibleTo: this.props.visibleTo,
 			unlisted: this.props.unlisted,
+			
+			serverOnly: this.props.serverOnly
 		};
 		
 		this.handleChange = this.handleChange.bind(this);
-		this.handleUnlistedCheck = this.handleUnlistedCheck.bind(this);
+		this.handleUnlistedToggle = this.handleUnlistedToggle.bind(this);
+		this.handleServerOnlyToggle = this.handleServerOnlyToggle.bind(this);
 		this.handleDropdownChanges = this.handleDropdownChanges.bind(this);
 		this.handleMarkdownToggle = this.handleMarkdownToggle.bind(this);
 		this.handleCategoryChange = this.handleCategoryChange.bind(this);
@@ -88,7 +91,14 @@ class CreatePostModal extends Component {
 		this.setState({[event.target.name]: event.target.value});
 	}
 
-	handleUnlistedCheck(event) {
+	handleServerOnlyToggle(event) {
+		event.stopPropagation();
+		this.setState({
+			serverOnly: !this.state.serverOnly,
+		});
+	}
+
+	handleUnlistedToggle(event) {
 		event.stopPropagation();
 		this.setState({
 		unlisted: !this.state.unlisted,
@@ -299,6 +309,7 @@ class CreatePostModal extends Component {
 			return(
 				<span>
 				<span className="nonContentSettings">
+				<Checkbox label='This Server Only' name="serverOnly" toggle onChange={this.handleServerOnlyToggle} checked={this.state.serverOnly} className="toggleContainer" />
 				<VisibilitySettings visibility={this.state.visibility} userID={Cookies.get("userID").split('/').pop() || this.props.storeItems.userId.split('/').pop()} handleChange={this.handleDropdownChanges}/> 
 				<CategoriesModal currentValues={this.state.categories} handleCategoryChange={this.handleCategoryChange} />
 				</span>
@@ -312,7 +323,7 @@ class CreatePostModal extends Component {
 				<span className="backButton">
 				<AnimatedButton iconForButton="angle double left icon" buttonText="BACK" clickFunction={this.switchPages}/>
 				</span>
-				<Checkbox label='unlisted' name="unlisted" toggle onChange={this.handleUnlistedCheck} checked={this.state.unlisted} className="toggleContainer" />
+				<Checkbox label='unlisted' name="unlisted" toggle onChange={this.handleUnlistedToggle} checked={this.state.unlisted} className="toggleContainer" />
 				<Checkbox label='Markdown' name="contentType" toggle onChange={this.handleMarkdownToggle} checked={this.state.contentType === 'text/markdown'} disabled={this.state.file !== ''}  className='toggleContainer'/>     
 
 				<AnimatedButton iconForButton="trash alternate outline icon" buttonText="Clear" clickFunction={this.clearContent}/>
@@ -436,6 +447,8 @@ CreatePostModal.defaultProps = {
 	visibility: 'PUBLIC',
 	visibleTo: [],
 	unlisted: false,
+	
+	serverOnly: false,
 }
 
 CreatePostModal.propTypes = {
