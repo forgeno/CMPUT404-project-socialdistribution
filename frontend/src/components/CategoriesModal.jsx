@@ -34,6 +34,7 @@ class CategoriesModal extends Component {
 		this.getCategories();
 	}
 
+
 	getCategories() {
 		this.setState({ isFetching: true });
 		const requireAuth = true, urlPath = "/api/categories/";

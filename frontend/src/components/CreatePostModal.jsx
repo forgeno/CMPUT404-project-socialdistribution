@@ -40,6 +40,7 @@ class CreatePostModal extends Component {
 		this.handleCategoryChange = this.handleCategoryChange.bind(this);
 		
 		this.switchPages = this.switchPages.bind(this);
+		this.validPageOne = this.validPageOne.bind(this);
 		this.createPageOneOrPageTwoInputs = this.createPageOneOrPageTwoInputs.bind(this);
 		this.createPageOneOrPageTwoButtons = this.createPageOneOrPageTwoButtons.bind(this);
 		
@@ -120,9 +121,14 @@ class CreatePostModal extends Component {
 
 	switchPages(event) {
 		event.stopPropagation();
-		this.setState({
-			createPostPageOne: !this.state.createPostPageOne,
-		});
+		if (this.state.createPostPageOne && !this.validPageOne()) {
+			alert("Please ensure you have a title and description!");
+		}
+		else {
+			this.setState({
+				createPostPageOne: !this.state.createPostPageOne,
+			});
+		}
 	}
 
 	handleImageChange(e) {
@@ -160,6 +166,15 @@ class CreatePostModal extends Component {
 			contentType: "text/plain",
 			imagePreviewUrl: '',
 			});
+	}
+
+	validPageOne() {
+		if (!(this.state.title && this.state.description)) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	validPayload(requestBody) {

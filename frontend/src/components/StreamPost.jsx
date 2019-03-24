@@ -9,8 +9,6 @@ import Cookies from 'js-cookie';
 import store from '../store/index.js';
 import PropTypes from 'prop-types';
 import TextTruncate from 'react-text-truncate'; 
-import { SemanticToastContainer} from 'react-semantic-toasts';
-import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import './styles/StreamPost.css';
 
 function categoryToLabel(category) {
@@ -237,11 +235,8 @@ class StreamPost extends Component {
 						{this.contentRender(this.props.content, this.props.contentType)}
 					</section>
 					
-					<CommentsOnPost postID={this.props.postID} />
-					
-					{/* Container here so toast goes past modal*/} 
-					<SemanticToastContainer position="top-left"/>		
-					
+					<CommentsOnPost postID={this.props.postID} />		
+
 					{this.categoryLabels()}
 					<span className="postID"> {this.props.postID} </span>
 					<span className="bottomOfContentModal"></span>

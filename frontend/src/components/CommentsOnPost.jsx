@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
-import { Comment, Header, Form, Input, Button, Loader} from 'semantic-ui-react';
+import { Comment, Header, Form, Input, Button, Loader, Message} from 'semantic-ui-react';
 import ProfileBubble from './ProfileBubble';
 import Cookies from 'js-cookie';
 import HTTPFetchUtil from "../util/HTTPFetchUtil";
 import PropTypes from 'prop-types';
-import { toast } from 'react-semantic-toasts';
-import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import './styles/CommentsInPost.css';
 
 class CommentsOnPost extends Component {	
@@ -17,6 +15,7 @@ class CommentsOnPost extends Component {
 			comments: [],
 			commentText: '',
 			isFetching: false,
+			failedFetch: false,
 		};
 		this.createCommentList = this.createCommentList.bind(this);
 		this.getComments = this.getComments.bind(this);
@@ -58,20 +57,10 @@ class CommentsOnPost extends Component {
 					})
 				}
 				else {
-					toast(
-						{
-							type: 'error',
-							icon: 'window close',
-							title: 'Failed',
-							description: <p> Failed to retrieve comments. </p>,
-						}
-					);
-					// TODO no default comments here
 					this.setState({
 						isFetching: false,
-						comments: this.props.comments,
+						failedFetch: true,
 					});
-					console.log("EEE", this.state.isFetching);
 				}
 			})
 			.catch((error) => {
@@ -103,26 +92,10 @@ class CommentsOnPost extends Component {
 					this.setState({
 						commentText: '',
 					});	
-					
-					toast(
-						{
-							type: 'success',
-							icon: 'check circle outline',
-							title: 'Success',
-							description: <p> Your comment was added successfully. </p>,
-						}
-					);
 					this.getComments();						
 		        }
 		        else {
-					toast(
-						{
-							type: 'error',
-							icon: 'window close',
-							title: 'Failed',
-							description: <p> Failed to add comment </p>,
-						}
-					);
+					alert("Failed to add comment");
 		        }
 		    })
 		    .catch((error) => {
@@ -161,15 +134,24 @@ class CommentsOnPost extends Component {
 
 
 	render() {
-	//TODO: Change appearance in case of no comments
+		let $commentSection;
+		if (this.state.failedFetch) {
+			$commentSection = 	<Message negative>
+									<Message.Header>Fetch comments failed</Message.Header>
+								</Message>;
+		}
+		else {
+			$commentSection = this.state.comments.map(this.createCommentList);
+		}
+	
 		return (
 			<span>
 				<Comment.Group>
 					<Header as='h3' dividing>
 						Comments
 					</Header>
-					<Loader active={this.state.isFetching}/>
-					{this.state.comments.map(this.createCommentList)}
+					{this.state.isFetching && <Loader/>}
+					{$commentSection}
 				</Comment.Group>
 				<Form>
 					<Input 	
@@ -185,36 +167,6 @@ class CommentsOnPost extends Component {
 			</span>
 		);
 	}
-}
-
-// TODO: Remove this default comment when comments implemented
-CommentsOnPost.defaultProps = {
-	comments: [
-		{ 	"author": {
-				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
-				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
-				"host": "http://git-friends.com/",
-				"displayName": "Greg Johnson",
-				"github": "http://github.com/gjohnson",
-			},
-			"comment": "THIS IS MY COMMENT",
-			"contentType": "text/markdown",
-			"published": "2015-03-09",
-			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah11"
-		},
-		{ 	"author": {
-				"id":"http://git-friends.com/author/THIS-IS-A-TEST-AND-NOT-REAL",
-				"url": "http://git-friends.com/author/THIS-IS-THE-SAME-IN-EXAMPLEARTICLEJSON",
-				"host": "http://git-friends.com/",
-				"displayName": "Kevin Johnson",
-				"github": "http://github.com/kjohnson",
-			},
-			"comment": "ANOTHER ONE",
-			"contentType": "text/markdown",
-			"published": "2015-03-09",
-			"id": "blah-blah-blah-blah-blah-blah-blah-blah-blah"
-		},
-	],
 }
 
 CommentsOnPost.propTypes = {
