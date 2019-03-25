@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Feed, Modal, Label, Icon } from 'semantic-ui-react';
+import { Feed, Modal, Label, Icon, Popup } from 'semantic-ui-react';
 import ReactMarkdown from 'react-markdown';
 import ProfileBubble from './ProfileBubble';
 import AnimatedButton from './AnimatedButton';
@@ -139,6 +139,9 @@ class StreamPost extends Component {
 			case "FOAF":
 				$visibilityIcon = "users";
 				break;
+			case "SERVERONLY":
+				$visibilityIcon = "server";
+				break;
 			case "PRIVATE":
 				$visibilityIcon = "setting";
 				break;
@@ -160,8 +163,11 @@ class StreamPost extends Component {
 				<Feed.Content>
 					<div>
 						<Feed.Summary>
-							<span className="title"> <h3> 	
-														<Icon name={$visibilityIcon} className="visibilityIcon"/>
+							<span className="title"> <h3>
+														<Popup
+														trigger={<Icon name={$visibilityIcon} aria-label={this.props.visibility} className="visibilityIcon"/>}
+														content={this.props.visibility}
+														/>
 														<TextTruncate 
 															line={1} 
 															text={this.props.title} 
