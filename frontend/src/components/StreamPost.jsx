@@ -235,7 +235,7 @@ class StreamPost extends Component {
 						{this.contentRender(this.props.content, this.props.contentType)}
 					</section>
 					
-					<CommentsOnPost postID={this.props.postID} />		
+					<CommentsOnPost postID={this.props.postID}/>		
 
 					{this.categoryLabels()}
 					<span className="postID"> {this.props.postID} </span>

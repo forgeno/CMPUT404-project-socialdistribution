@@ -32,22 +32,14 @@ class CommentsOnPost extends Component {
 			isFetching: true,
 		});
 		const requireAuth = true;
-		const urlPath = "/api/posts/" + this.props.postID + "/comments/";
-		// TODO use this one when comments implemented.
-		// const urlPath = "/api/posts/" + this.props.postID;
-		
+		const urlPath = "/api/posts/" + this.props.postID;
 			HTTPFetchUtil.getRequest(urlPath, requireAuth)
 			.then((httpResponse) => {
 				if(httpResponse.status === 200) {
 					httpResponse.json().then((results) => {	
 						var commentList = [];
-						// TODO switch this when comments implemented
-						// results.forEach(result => {
-							// commentList.push(this.createCommentFromJson(result.comment));
-						//}
-						
-						results.forEach(result => {
-							commentList.push(this.createCommentFromJson(result));
+						results.posts[0].comments.forEach(result => {
+							commentList.push(result);
 						});
 						
 						this.setState({
@@ -77,6 +69,8 @@ class CommentsOnPost extends Component {
 		const urlPath = "/api/posts/" + this.props.postID + "/comments";
 		const requireAuth = true;
 		const requestBody = {
+			query: "addComment",
+			post: this.props.postID,
 			comment: {
 				author: {
 					id: Cookies.get("userID"),
