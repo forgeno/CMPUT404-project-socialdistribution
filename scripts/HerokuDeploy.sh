@@ -1,5 +1,5 @@
 cd ../
-heroku login
+
 cd backend
 git add -A
 git commit -a -m "Redeploying Back End to Heroku"
