@@ -27,6 +27,7 @@
 	float: right;
 	display: inline-block;
 	margin-top: -2%;
+	padding-bottom: 5%;
 }
 
 .ui.feed > .event > .label {
@@ -125,8 +126,4 @@ section.description {
 
 .contentModalContent img {
 	max-width: 100%;
-}
-
-.bottomOfContentModal {
-	padding: 3%;
 }
