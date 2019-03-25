@@ -114,6 +114,7 @@ class VisibilitySettings extends Component {
 					<Dropdown.Item text='PUBLIC' value="PUBLIC" onClick={this.handleVisibilityChange}/>
 					<Dropdown.Item text='FRIENDS' value="FRIENDS" onClick={this.handleVisibilityChange}/>
 					<Dropdown.Item text='FOAF' value="FOAF" onClick={this.handleVisibilityChange}/>
+					<Dropdown.Item text='SERVERONLY' value="SERVERONLY" onClick={this.handleVisibilityChange}/>
 					<Dropdown.Item text='PRIVATE' value="PRIVATE" onClick={ () => this.setState({showModal: true, open: false})}/>
 				
 					<Modal 

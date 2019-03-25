@@ -31,13 +31,10 @@ class CreatePostModal extends Component {
 			visibility: this.props.visibility,
 			visibleTo: this.props.visibleTo,
 			unlisted: this.props.unlisted,
-			
-			serverOnly: this.props.serverOnly
 		};
 		
 		this.handleChange = this.handleChange.bind(this);
 		this.handleUnlistedToggle = this.handleUnlistedToggle.bind(this);
-		this.handleServerOnlyToggle = this.handleServerOnlyToggle.bind(this);
 		this.handleDropdownChanges = this.handleDropdownChanges.bind(this);
 		this.handleMarkdownToggle = this.handleMarkdownToggle.bind(this);
 		this.handleCategoryChange = this.handleCategoryChange.bind(this);
@@ -89,13 +86,6 @@ class CreatePostModal extends Component {
 
 	handleChange(event) {
 		this.setState({[event.target.name]: event.target.value});
-	}
-
-	handleServerOnlyToggle(event) {
-		event.stopPropagation();
-		this.setState({
-			serverOnly: !this.state.serverOnly,
-		});
 	}
 
 	handleUnlistedToggle(event) {
@@ -309,7 +299,6 @@ class CreatePostModal extends Component {
 			return(
 				<span>
 				<span className="nonContentSettings">
-				<Checkbox label='This Server Only' name="serverOnly" toggle onChange={this.handleServerOnlyToggle} checked={this.state.serverOnly} className="toggleContainer" />
 				<VisibilitySettings visibility={this.state.visibility} userID={Cookies.get("userID").split('/').pop() || this.props.storeItems.userId.split('/').pop()} handleChange={this.handleDropdownChanges}/> 
 				<CategoriesModal currentValues={this.state.categories} handleCategoryChange={this.handleCategoryChange} />
 				</span>
@@ -447,8 +436,6 @@ CreatePostModal.defaultProps = {
 	visibility: 'PUBLIC',
 	visibleTo: [],
 	unlisted: false,
-	
-	serverOnly: false,
 }
 
 CreatePostModal.propTypes = {
