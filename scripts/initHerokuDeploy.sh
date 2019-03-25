@@ -1,6 +1,5 @@
 echo "Seting up Heroku for backend deployment"
-echo "Logging into Heroku"
-heroku login
+
 
 cd ../
 cd backend
