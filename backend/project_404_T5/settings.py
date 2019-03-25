@@ -16,7 +16,6 @@ import django_heroku
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = '9r1hgxrq$l_5m&eue5w_s(r49bmy11qcceg)1k@=(sbi@g_i6w'
 DEBUG = True
 
 ALLOWED_HOSTS = ['radiant-savannah-77591.herokuapp.com']
-
 
 # Application definition
 
@@ -57,7 +55,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'project_404_T5.urls'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -77,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project_404_T5.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -87,7 +83,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -107,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -121,12 +115,18 @@ USE_L10N = True
 
 USE_TZ = True
 
-# these 2 URL should be changed when depolying
-# this URL is to indicate the host for frontend so backend would not forward the request 
-# to other servers for node to node connection
-FRONTEND_URL = "http://testserver/"
+########################################################
+# The following values MUST be changed to be server specific when deploy
+
 # this URL is to indicate what host of the backend is
+# this value would be used as the host of the user when register and origin when create a post
+# make sure it has a slash at the end
 BACKEND_URL = "https://127.0.0.1:8000/"
+# cross server basic auth credentials,
+# these credentials are for sending cross server requests so the other servers knows who we are
+USERNAME = "server1"
+PASSWORD = "server1"
+########################################################
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
