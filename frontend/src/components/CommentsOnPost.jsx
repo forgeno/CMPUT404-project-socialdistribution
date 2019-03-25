@@ -136,6 +136,9 @@ class CommentsOnPost extends Component {
 		}
 		else {
 			$commentSection = this.state.comments.map(this.createCommentList);
+			if ($commentSection.length < 1) {
+				$commentSection = <p> No comments yet...</p>;
+			}
 		}
 	
 		return (
@@ -145,7 +148,7 @@ class CommentsOnPost extends Component {
 						Comments
 					</Header>
 					{this.state.isFetching && <Loader/>}
-					{$commentSection}
+					{!this.state.isFetching && $commentSection}
 				</Comment.Group>
 				<Form>
 					<Input 	
