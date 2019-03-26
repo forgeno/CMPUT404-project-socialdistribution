@@ -178,7 +178,7 @@ class CreatePostModal extends Component {
 	}
 
 	validPayload(requestBody) {
-		if (!(requestBody.title && requestBody.description && requestBody.content && requestBody.categories.length > 0)) {
+		if (!(requestBody.title && requestBody.description && requestBody.content)) {
 			return false;
 		}
 		return true;
