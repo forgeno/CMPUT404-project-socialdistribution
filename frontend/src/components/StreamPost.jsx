@@ -108,12 +108,16 @@ class StreamPost extends Component {
 	}
 	
 	categoryLabels() {
-		let labels = this.props.categories.map(categoryToLabel);
-		return(
-			<div className="categoryLabels">
-			{labels}
-			</div>
-		);
+		if(this.props.categories) {
+			let labels = this.props.categories.map(categoryToLabel);
+			return(
+				<div className="categoryLabels">
+				{labels}
+				</div>
+			);
+		} else {
+			return null;
+		}
 	}
 	
 	deletePost(){
@@ -284,7 +288,7 @@ StreamPost.propTypes = {
 	content: PropTypes.string.isRequired,
 	contentType: PropTypes.string.isRequired,
 	
-	categories: PropTypes.array.isRequired,
+	categories: PropTypes.array,
 	visibility: PropTypes.string.isRequired,
 	visibleTo: PropTypes.array.isRequired,
 	unlisted: PropTypes.bool.isRequired,
