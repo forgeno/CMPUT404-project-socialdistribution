@@ -290,7 +290,7 @@ class CreatePostModal extends Component {
 			}
 		}
 		else {
-			alert("Please ensure you have a title, description, categories, and content.");	
+			alert("Please provide some content.");	
 		}	
 	}
 
