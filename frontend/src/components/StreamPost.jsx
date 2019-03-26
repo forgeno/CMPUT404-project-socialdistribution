@@ -8,7 +8,8 @@ import CreatePostModal from './CreatePostModal';
 import Cookies from 'js-cookie';
 import store from '../store/index.js';
 import PropTypes from 'prop-types';
-import TextTruncate from 'react-text-truncate'; 
+import TextTruncate from 'react-text-truncate';
+import {CopyToClipboard} from 'react-copy-to-clipboard'; 
 import './styles/StreamPost.css';
 
 function categoryToLabel(category) {
@@ -24,6 +25,7 @@ class StreamPost extends Component {
 			showDeleteModal: false,
 			showEditModal: false,
 			yourOwnPost: false,
+			copyText: "Copy a link to this post",
 		}
 		
 		this.openContentModal = this.openContentModal.bind(this);
@@ -38,6 +40,7 @@ class StreamPost extends Component {
 		this.contentRender = this.contentRender.bind(this);
 		this.deletePost = this.deletePost.bind(this);
 		
+		this.copyPostToClipboard = this.copyPostToClipboard.bind(this);
 		this.categoryLabels = this.categoryLabels.bind(this);
 	}	
 	
@@ -91,6 +94,13 @@ class StreamPost extends Component {
  		});
 	}
 
+
+	copyPostToClipboard(event) {
+		event.stopPropagation();
+		this.setState({
+			copyText: "Copied!",
+		});
+	}
 
 	contentRender(content, contentType) {
 		switch(contentType) {
@@ -168,10 +178,30 @@ class StreamPost extends Component {
 					<div>
 						<Feed.Summary>
 							<span className="title"> <h3>
+														{/* TODO: Change CopyToClipboard text to use our frontend url for single posts"*/}
+														<Popup
+														trigger={
+														<CopyToClipboard text={this.props.origin}>
+														<Icon name={"share square"} className="linkToPost" onClick={this.copyPostToClipboard}/>
+														</CopyToClipboard>
+														} 
+														content={this.state.copyText}
+														hideOnScroll
+														onClose={() => this.setState({ copyText: "Copy a link to this post"})}
+														/>
+														
+														<Popup
+														trigger={<Icon name={"address book"} aria-label={this.props.origin} className="originOfPost"/>}
+														content={this.props.origin}
+														hideOnScroll
+														/>
+														
 														<Popup
 														trigger={<Icon name={$visibilityIcon} aria-label={this.props.visibility} className="visibilityIcon"/>}
 														content={this.props.visibility}
+														hideOnScroll
 														/>
+														
 														<TextTruncate 
 															line={1} 
 															text={this.props.title} 
@@ -216,7 +246,6 @@ class StreamPost extends Component {
 					<Feed.Date className="datetimeOfPost">
 						{this.props.date}
 					</Feed.Date>								
-					
 					</div>
 					
 					
@@ -292,6 +321,8 @@ StreamPost.propTypes = {
 	visibility: PropTypes.string.isRequired,
 	visibleTo: PropTypes.array.isRequired,
 	unlisted: PropTypes.bool.isRequired,
+	
+	origin: PropTypes.string.isRequired,
 	
 	author: PropTypes.string.isRequired,
 	viewingUser: PropTypes.string,

@@ -45,6 +45,7 @@
     "prop-types": "latest",
     "react": "^16.8.3",
     "react-app-polyfill": "^0.2.1",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dev-utils": "^7.0.3",
     "react-dom": "^16.8.3",
     "react-markdown": "^4.0.6",
