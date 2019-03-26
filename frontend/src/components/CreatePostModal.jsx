@@ -122,7 +122,7 @@ class CreatePostModal extends Component {
 	switchPages(event) {
 		event.stopPropagation();
 		if (this.state.createPostPageOne && !this.validPageOne()) {
-			alert("Please ensure you have a title and description!");
+			alert("Please ensure you have a title, description, and categories!");
 		}
 		else {
 			this.setState({
@@ -169,7 +169,7 @@ class CreatePostModal extends Component {
 	}
 
 	validPageOne() {
-		if (!(this.state.title && this.state.description)) {
+		if (!(this.state.title && this.state.description && this.state.categories.length > 0)) {
 			return false;
 		}
 		else {
@@ -178,7 +178,7 @@ class CreatePostModal extends Component {
 	}
 
 	validPayload(requestBody) {
-		if (!(requestBody.title && requestBody.description && requestBody.content)) {
+		if (!(requestBody.title && requestBody.description && requestBody.content && requestBody.categories.length > 0)) {
 			return false;
 		}
 		return true;
@@ -315,11 +315,11 @@ class CreatePostModal extends Component {
 				<Checkbox label='unlisted' name="unlisted" toggle onChange={this.handleUnlistedToggle} checked={this.state.unlisted} className="toggleContainer" />
 				<Checkbox label='Markdown' name="contentType" toggle onChange={this.handleMarkdownToggle} checked={this.state.contentType === 'text/markdown'} disabled={this.state.file !== ''}  className='toggleContainer'/>     
 
-				<AnimatedButton iconForButton="trash alternate outline icon" buttonText="Clear" clickFunction={this.clearContent}/>
+				<AnimatedButton iconForButton="trash alternate outline icon" buttonText="Clear" clickFunction={this.clearContent} extraAttributes={"negative"}/>
 
 				<span>
 				<label htmlFor="imageUploadFile">
-				<AnimatedButton iconForButton="image icon" buttonText="IMG"/>
+				<AnimatedButton iconForButton="image icon" buttonText="IMG" extraAttributes={"primary"}/>
 				</label>
 				<input type="file" id="imageUploadFile" accept="image/png, image/jpeg" onChange={(e)=>this.handleImageChange(e)} style={{display: 'none'}}/>
 				</span>
