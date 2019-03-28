@@ -15,9 +15,7 @@ import './styles/CreatePostModal.css';
 
 const controller = new AbortController();
 const signal = controller.signal;
-signal.addEventListener("abort", () => {
-    console.log("aborted!");
-});
+signal.addEventListener("abort", () => {});
 
 class CreatePostModal extends Component {		
 

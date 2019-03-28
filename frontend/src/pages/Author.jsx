@@ -16,9 +16,7 @@ import FriendsListComponent from '../components/FriendsListComponent';
 
 const controller = new AbortController();
 const signal = controller.signal;
-signal.addEventListener("abort", () => {
-    console.log("aborted!");
-});
+signal.addEventListener("abort", () => {});
 
 class Author extends Component {
 

@@ -15,9 +15,7 @@ import utils from "../util/utils";
 
 const controller = new AbortController();
 const signal = controller.signal;
-signal.addEventListener("abort", () => {
-    console.log("aborted!");
-});
+signal.addEventListener("abort", () => {});
 
 class Friends extends Component {
 
