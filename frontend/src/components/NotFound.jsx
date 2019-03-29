@@ -1,11 +1,19 @@
 import React from 'react';
-
-
+import { Message } from 'semantic-ui-react';
+import './styles/NotFound.css';
 const NotFound = () => {
     return (
-        <div>
-            <h2>Not Found</h2>
-            <p>The page you're looking for does not exists.</p>
+        <div className="container">
+			<img className="hmm" alt="hmm" src={require('../assets/images/hmm.png')}/>
+        	<h1 className="text404"> 404 </h1>
+        
+        	<Message as="h2"
+            className="notFoundMessage"
+            negative
+            >
+            <Message.Header> Not Found </Message.Header>
+            <p>The page you're looking for does not exist.</p>
+            </Message>
         </div>
     )
 }
