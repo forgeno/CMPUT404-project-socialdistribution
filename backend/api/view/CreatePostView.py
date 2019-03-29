@@ -102,7 +102,7 @@ class CreatePostView(generics.GenericAPIView):
                     try:
                         server_obj = ServerUser.objects.get(host=commenter_host)
                         commenter_short_id = get_author_id(comment["author"]["id"])
-                        url = "{}api/author/{}".format(server_obj.host, commenter_short_id)
+                        url = "{}{}author/{}".format(server_obj.host, server_obj.prefix, commenter_short_id)
                         response = requests.post(url,
                                                 auth=(server_obj.send_username, server_obj.send_password),
                                                 headers=headers,
@@ -208,7 +208,7 @@ class CreatePostView(generics.GenericAPIView):
                         try:
                             server_obj = ServerUser.objects.get(host=commenter_host)
                             commenter_short_id = get_author_id(comment["author"]["id"])
-                            url = "{}api/author/{}".format(server_obj.host, commenter_short_id)
+                            url = "{}{}author/{}".format(server_obj.host, server_obj.prefix, commenter_short_id)
                             response = requests.post(url,
                                                     auth=(server_obj.send_username, server_obj.send_password),
                                                     headers=headers,
