@@ -74,7 +74,8 @@ class Post(models.Model):
 
 # model for a comment
 class Comment(models.Model):
-    author = models.ForeignKey(AuthorProfile, related_name="comments", on_delete=models.CASCADE)
+    # author = models.ForeignKey(AuthorProfile, related_name="comments", on_delete=models.CASCADE)
+    author = models.CharField(max_length=100)
     comment = models.TextField(max_length=2 ** 21)
     CONTENT_TYPE = (
         ("text/markdown", "text/markdown"),
@@ -89,7 +90,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 # model for indicating the relationship between author A and author B
@@ -108,8 +109,12 @@ class Follow(models.Model):
 
 
 # model for list of servers
-class ServerNode(models.Model):
-    name = models.URLField()
+class ServerUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    host = models.URLField()
+    prefix = models.CharField(max_length=20, blank=True)
+    send_username = models.CharField(max_length=100)
+    send_password = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return self.user.username

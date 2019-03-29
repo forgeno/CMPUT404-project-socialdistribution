@@ -4,6 +4,7 @@ import time
 
 
 # return author id that is escaped
+# input id should be the short id from author profile
 def get_author_id(host, input_id, escaped):
     formated_id = "{}author/{}".format(host, str(input_id))
     if (escaped):
@@ -36,7 +37,11 @@ def create_mock_post(dict_input, author_profile):
 
 def assert_post(output, expected_post, author_profile):
     for key in expected_post.keys():
-        if key != "id" and key != "author" and key != "published" and key != "source" and key != "origin":
+        if key == "category" or key == "visibleTo":
+            assert len(output[key]) == len(expected_post[key])
+            for expected_ele in expected_post[key]:
+                assert expected_ele in output[key]
+        elif key != "id" and key != "author" and key != "published" and key != "source" and key != "origin":
             assert output[key] == expected_post[key]
     # assert author part
 
@@ -48,6 +53,18 @@ def assert_post(output, expected_post, author_profile):
     assert output["author"]["id"] == expected_id
     assert output["author"]["url"] == expected_id
 
+# custom assert for comments on a post
+# Tests parts of the python dict struct such as author dict and comment/contentType
+def assert_comments(post, author, expected_comment):
+    comments = post["comments"]
+    for i in range(len(comments)):
+        assert (comments[i]["author"]["id"] == expected_comment[i]["author"]["id"])
+        # assert (comments[i]["url"] == expected_comment[i]["author"]["url"])
+        assert (comments[i]["author"]["host"] == expected_comment[i]["author"]["host"])
+        assert (comments[i]["author"]["displayName"] == expected_comment[i]["author"]["displayName"])
+        assert (comments[i]["author"]["github"] == expected_comment[i]["author"]["github"])
+        assert (comments[i]["comment"] == expected_comment[i]["comment"])
+        assert (comments[i]["contentType"] == expected_comment[i]["contentType"])
 
 def assert_post_response(response, expected_output, expected_author):
     assert (response.status_code == 200)

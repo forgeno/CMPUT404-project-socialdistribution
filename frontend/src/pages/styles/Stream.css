@@ -7,9 +7,7 @@
 	padding-top: 1%;
 }
 
-.modalButtonPosition {
-	position: relative;
-	left: 25%;
-	top: 15%;
-	max-width: 30%;
+.streamHeader {
+	font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+	color: white;
 }

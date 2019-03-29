@@ -1,5 +1,7 @@
-from ..models import AuthorProfile, Follow
-from ..serializers import AuthorProfileSerializer
+from urllib.parse import urlparse
+
+from ..models import AuthorProfile, Follow, Post, Comment
+from ..serializers import AuthorProfileSerializer, CommentSerializer, PostSerializer
 import urllib
 from django.conf import settings
 
@@ -11,17 +13,15 @@ def get_author_id(author_profile, escaped):
     return formated_id
 
 # the post argument should be a serialized post object
-def can_read(request, post):
+def can_read(current_author_id, post):
     try:
         # todo: Check if author does not belong to our server for cross server
-        current_author_profile = AuthorProfile.objects.get(user=request.user)
-        current_author_id = get_author_id(current_author_profile, False)
 
-        if(current_author_id == post["author"]["id"] or post["visibility"] == "PUBLIC"):
-            return True
-
-        elif post["unlisted"]:
+        if(post["unlisted"]):
             return False
+
+        elif(current_author_id == post["author"]["id"] or post["visibility"] == "PUBLIC"):
+            return True
 
         else:
             # check FOAF
@@ -61,7 +61,9 @@ def can_read(request, post):
                     return False
             # check SERVERONLY
             elif (post["visibility"] == "SERVERONLY"):
-                if(current_author_profile.host == settings.BACKEND_URL):
+                parsed_url = urlparse(current_author_id)
+                author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
+                if(author_host == settings.BACKEND_URL):
                     return True
                 else:
                     return False
@@ -79,10 +81,3 @@ def get_author_profile_uuid(author_id):
         return author_data[1]
     else:
         return None
-
-def in_server_nodes_list(request):
-    request_server = request.build_absolute_uri('/')
-    result = Nodes.objects.filter(server=request_server)
-    if(result.exists()):
-        return True
-    return False

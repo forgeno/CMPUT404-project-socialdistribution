@@ -1,0 +1,30 @@
+.profile {
+    text-align: center;
+    /*overflow-y: scroll;*/
+    max-width: 75%;
+    /*max-height: 100vh;*/
+}
+
+.profile-username {
+    font-size:large;
+    font-weight: bold;
+}
+
+.profile-tabs {
+    margin-left: 5%;
+    max-width: 75%;
+    max-height: 70vh;
+}
+
+.streamFeedInProfile > .ui.segment[class*="bottom attached"] {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.AuthorPage {
+	overflow-y: scroll;
+}
+
+.authorHeader {
+	color: white;
+	position: fixed;
+}

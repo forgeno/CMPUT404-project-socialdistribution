@@ -1,20 +1,19 @@
-import store from "../store/index";
+//import store from "../store/index";
+import Cookies from 'js-cookie';
 
 const getHeader = (requireAuth) => {
     if(requireAuth) {
-        const loginCredentials = store.getState().loginReducers,
-            username = loginCredentials.username,
-            password = loginCredentials.password;
-
         return {"Content-Type": "application/json", 
                     'Authorization': 'Basic ' + 
-                    window.btoa(username + ':' + password)};
+                    Cookies.get('userPass')};
     } else {
         return  {"Content-Type": "application/json"};
     }
 }
 
-const url = "http://localhost:8000"; //
+const PROD_URL = "https://radiant-savannah-77591.herokuapp.com",
+     LOCALHOST = "http://localhost:8000",
+     url = (window.location.hostname === "localhost" ? LOCALHOST : PROD_URL);
 
 export default class HTTPFetchUtil {
 
@@ -25,7 +24,7 @@ export default class HTTPFetchUtil {
      * @param {Object} requestBody: Content we want to add or change.
      */
 
-    static sendPostRequest(path, requireAuth, requestBody) {
+    static sendPostRequest(path, requireAuth, requestBody, signal) {
         const urlEndpoint = url.concat(path),
             bodyToSend = JSON.stringify(requestBody),
             headers = getHeader(requireAuth),
@@ -35,15 +34,29 @@ export default class HTTPFetchUtil {
                 headers: headers
             },
             postRequest = new Request(urlEndpoint, payload);
-        return fetch(postRequest)
+        return fetch(postRequest, signal)
     }
+    
+    static sendPutRequest(path, requireAuth, requestBody, signal) {
+        const urlEndpoint = url.concat(path),
+            bodyToSend = JSON.stringify(requestBody),
+            headers = getHeader(requireAuth),
+            payload = {
+                method: "PUT",
+                body: bodyToSend,
+                headers: headers
+            },
+            putRequest = new Request(urlEndpoint, payload);
+        return fetch(putRequest, signal)
+    }
+    
     /**
      * 
      * @param {String} path: the path we add to our host to send requests to. 
      * @param {Boolean} requireAuth: Whether we need to authenticate the requests or not to the backend 
      */
 
-    static getRequest(path, requireAuth) {
+    static getRequest(path, requireAuth, signal) {
         const urlEndpoint = url.concat(path),
             headers = getHeader(requireAuth),
             payload = {
@@ -52,6 +65,17 @@ export default class HTTPFetchUtil {
             },
             getRequest = new Request(urlEndpoint, payload);
         
-        return fetch(getRequest)
+        return fetch(getRequest, signal)
+    }
+    
+    static deleteRequest(path, requireAuth, signal) {
+		const urlEndpoint = url.concat(path),
+			headers = getHeader(requireAuth),
+			payload = {
+			method: "DELETE",
+                headers: headers
+            },
+            deleteRequest = new Request(urlEndpoint, payload);
+        return fetch(deleteRequest, signal)
     }
 }
