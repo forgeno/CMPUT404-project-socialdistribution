@@ -37,28 +37,6 @@ def valid_input(data):
     return True
 
 
-def valid_author(request):
-    try:
-        tmp = request.data["author"]["id"].split("author/")
-        author_host = tmp[0]
-        # todo check if host is local when cross server
-        author_short_id = tmp[1]
-
-        tmp = request.data["friend"]["id"].split("author/")
-        friend_host = tmp[0]
-        # todo check if host is local when cross server
-        friend_short_id = tmp[1]
-
-        request_user = AuthorProfile.objects.filter(user=request.user)
-        if not (request_user.exists() and
-                AuthorProfile.objects.filter(id=friend_short_id).exists() and
-                str(request_user[0].id) == str(author_short_id)):
-            return False
-    except:
-        return False
-    return True
-
-
 def valid_local_author(author_host, author_id):
     try:
         tmp = author_id.split("author/")
