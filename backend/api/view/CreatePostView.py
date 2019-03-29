@@ -78,7 +78,7 @@ class CreatePostView(generics.GenericAPIView):
                         public_posts += response_json["posts"]
 
                 except Exception as e:
-                    return Response(e,status.HTTP_400_BAD_REQUEST)
+                    return Response("Error: Failed to fetch remote public posts",status.HTTP_400_BAD_REQUEST)
 
         query_set = Post.objects.filter(visibility="PUBLIC", unlisted=False).order_by("-published")
         public_posts +=  PostSerializer(query_set, many=True).data
@@ -103,10 +103,10 @@ class CreatePostView(generics.GenericAPIView):
                         server_obj = ServerUser.objects.get(host=commenter_host)
                         commenter_short_id = get_author_id(comment["author"]["id"])
                         url = "{}api/author/{}".format(server_obj.host, commenter_short_id)
-                        response = requests.post(url,
+                        headers = {'Content-type': 'application/json'}
+                        response = requests.get(url,
                                                 auth=(server_obj.send_username, server_obj.send_password),
-                                                headers=headers,
-                                                data=json.dumps(request.data)
+                                                headers=headers
                                                 )
                         # return Response(response.json(), response.status_code)
                         if(response.status != 200):
@@ -119,7 +119,7 @@ class CreatePostView(generics.GenericAPIView):
                     except ServerUser.DoesNotExist:
                         return Response("Error: Author not from allowed host", status.HTTP_400_BAD_REQUEST)
                     except Exception as e:
-                        return Response(e,status.HTTP_400_BAD_REQUEST)
+                        return Response("Error: Failed to fetch remote author profile", status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response("Error: Unable to provide comments", status.HTTP_400_BAD_REQUEST)
   
@@ -176,7 +176,7 @@ class CreatePostView(generics.GenericAPIView):
 
                     return Response(response.json(), response.status_code)
                 except Exception as e:
-                    return Response(e, status.HTTP_400_BAD_REQUEST)
+                    return Response("Error: Failed to fetch remote post", status.HTTP_400_BAD_REQUEST)
         # when server make the request
         elif server_user_exist:
             try:
@@ -209,10 +209,10 @@ class CreatePostView(generics.GenericAPIView):
                             server_obj = ServerUser.objects.get(host=commenter_host)
                             commenter_short_id = get_author_id(comment["author"]["id"])
                             url = "{}api/author/{}".format(server_obj.host, commenter_short_id)
-                            response = requests.post(url,
+                            headers = {'Content-type': 'application/json'}
+                            response = requests.get(url,
                                                     auth=(server_obj.send_username, server_obj.send_password),
-                                                    headers=headers,
-                                                    data=json.dumps(request.data)
+                                                    headers=headers
                                                     )
                             # return Response(response.json(), response.status_code)
                             if(response.status != 200):
@@ -225,7 +225,7 @@ class CreatePostView(generics.GenericAPIView):
                         except ServerUser.DoesNotExist:
                             return Response("Error: Author not from allowed host", status.HTTP_400_BAD_REQUEST)
                         except Exception as e:
-                            return Response(e,status.HTTP_400_BAD_REQUEST)
+                            return Response("Error: Failed to fetch remote author profile",status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response("Error: Unable to provide comments", status.HTTP_400_BAD_REQUEST)
 

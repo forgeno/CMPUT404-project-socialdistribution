@@ -43,15 +43,14 @@ class GetPostsView(generics.GenericAPIView):
                          # forward the request
                         parsed_post_url = urlparse(comment["author"])
                         commenter_host = '{}://{}/'.format(parsed_post_url.scheme, parsed_post_url.netloc)
-                        headers = {'Content-type': 'application/json'}
                         try:
                             server_obj = ServerUser.objects.get(host=commenter_host)
                             commenter_short_id = get_author_id(comment["author"])
                             url = "{}api/author/{}".format(server_obj.host, commenter_short_id)
-                            response = requests.post(url,
+                            headers = {'Content-type': 'application/json'}
+                            response = requests.get(url,
                                                     auth=(server_obj.send_username, server_obj.send_password),
-                                                    headers=headers,
-                                                    data=json.dumps(request.data)
+                                                    headers=headers
                                                     )
                             if(response.status_code != 200):
                                 return Response("Error: Unable to get foreign profile", status.HTTP_400_BAD_REQUEST)
@@ -63,7 +62,7 @@ class GetPostsView(generics.GenericAPIView):
                         except ServerUser.DoesNotExist:
                             return Response("Error: Author not from allowed host", status.HTTP_400_BAD_REQUEST)
                         except Exception as e:
-                            return Response(e,status.HTTP_400_BAD_REQUEST)
+                            return Response("Error: Failed to fetch remote author profile", status.HTTP_400_BAD_REQUEST)
                     else:
                         return Response("Error: unable to fetch comments for post", status.HTTP_400_BAD_REQUEST)
                 post["comments"] = comments
@@ -122,7 +121,7 @@ class GetPostsView(generics.GenericAPIView):
                 except ServerUser.DoesNotExist:
                     return Response("Error: Request not from allowed host", status.HTTP_400_BAD_REQUEST)
                 except Exception as e:
-                    return Response(e, status.HTTP_400_BAD_REQUEST)
+                    return Response("Error: Fetch remote author posts failed", status.HTTP_400_BAD_REQUEST)
         # when server make the request
         elif server_user_exists:
             request_user_full_id = request.META.get("HTTP_X_REQUEST_USER_ID", "")

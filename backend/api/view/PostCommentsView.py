@@ -108,7 +108,7 @@ class PostCommentsView(generics.GenericAPIView):
                     except ServerUser.DoesNotExist:
                         return Response("Error: Author not from allowed host", status.HTTP_400_BAD_REQUEST)
                     except Exception as e:
-                        return Response(e,status.HTTP_400_BAD_REQUEST)
+                        return Response("Error: Failed to create remote comment",status.HTTP_400_BAD_REQUEST)
                 else:
                     return self.insert_local_comment(request)
             elif(server_user_exists):
