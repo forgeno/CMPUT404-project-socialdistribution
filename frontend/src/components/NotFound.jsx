@@ -9,7 +9,7 @@ const NotFound = () => {
         
         	<Message as="h2"
             className="notFoundMessage"
-            negative
+            color="blue"
             >
             <Message.Header> Not Found </Message.Header>
             <p>The page you're looking for does not exist.</p>
