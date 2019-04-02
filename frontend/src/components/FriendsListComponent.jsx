@@ -5,6 +5,8 @@ import { Card, Button } from "semantic-ui-react";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import ProfileBubble from "../components/ProfileBubble";
+import Cookies from 'js-cookie';
+import store from '../store/index.js';
 
 class FriendListComponent extends Component {	
 
@@ -94,6 +96,13 @@ class FriendListComponent extends Component {
 	}
 
 	renderFriendCard(authorObj, authorIndex) {
+		let $profilePicture = null;
+		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userID);
+		let postHost = new URL(authorObj.id);
+		if (myHost.hostname !== postHost.hostname) {
+			$profilePicture = require('../assets/images/default3.png');
+		}
+		
 		return(
 		<div className="three wide column" key={"grid"+authorIndex}>
 			<Card>
@@ -101,6 +110,7 @@ class FriendListComponent extends Component {
             	<ProfileBubble
                     displayName={authorObj.displayName}
                 	userID={decodeURIComponent(authorObj.authorId)}
+                	profilePicture={$profilePicture}
                     profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}
                 />
                 </span>
