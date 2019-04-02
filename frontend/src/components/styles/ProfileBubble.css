@@ -1,38 +1,36 @@
 .textContainer {
 	position: absolute;
-	font-size: 2rem;
 	color: white;
 	font-weight: bolder;
-	left: 20%;
-	top: 25%;
+	font-family: Luxi Mono;
 }
 
 .profileBubbleInPost .textContainer {
-	font-size: 2rem;
-	left: 18%;
-	top: 25%;
+	font-size: 1.5rem;
+	left: 25px;
+	top: 18px;
 }
 
 .profile .textContainer {
-	font-size: 4rem;
-	left: 40%;
-	top: 35%;
+	font-size: 3.5rem;
+	left: 50px;
+	top: 50px;
 }
 
 .profileBubbleFriend .textContainer {
 	font-size: 3rem;
-	left: 42%;
-	top: 35%;
+	left: 60px;
+	top: 45px;
 }
 
 .profileBubbleInShowContent .textContainer {
-	font-size: 1em;
-	left: 40%;
-	top: 8%;
+	font-size: 0.9em;
+	left: 12px;
+	top: 2px;
 }
 
 .profileBubbleInModal .textContainer {
 	font-size: 4em;
-	left: 38%;
-	top: 15%;
+	left: 55px;
+	top: 25px;
 }

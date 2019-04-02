@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import 'semantic-ui-css/semantic.min.css';
 import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 import {Link} from "react-router-dom";
@@ -20,6 +21,7 @@ class SideBar extends Component {
 		this.state = {
 			haveFriendRequest: false,
 			numFriendRequests: 0,
+			displayLetter: Cookies.get("displayName").charAt(0).toUpperCase() || this.props.displayName.charAt(0).toUpperCase(),
 		};
 	}
 	
@@ -28,39 +30,53 @@ class SideBar extends Component {
 	}
 
 	componentWillUnmount() {
+		clearInterval(this.timer);
   		this.timer = null; 
+		controller.abort();
+	}
+	
+	componentWillReceiveProps(nextProps) {
+		if(this.props.displayName !== nextProps.displayName) {
+			if (nextProps.displayName) {
+				this.setState({
+					displayLetter: nextProps.displayName.charAt(0).toUpperCase(),
+				})
+			}
+		}	
+		
 	}
 	
 	checkForFriendRequest() {
-		const fullAuthorId = store.getState().loginReducers.userId || Cookies.get("userID");
-		const urlPath = "/api/followers/" + encodeURIComponent(fullAuthorId),
-			requireAuth = true;
-        HTTPFetchUtil.getRequest(urlPath, requireAuth, signal)
-            .then((httpResponse) => {
-                if (httpResponse.status === 200) {
-                    httpResponse.json().then((results) => {
-                    	if (results.authors.length > 0) {
-							clearInterval(this.timer);
-							this.timer = null;
-							this.setState({
-								haveFriendRequest: true,
-								numFriendRequests: results.authors.length,
-							});
-    					}
-                    })
-                }
-                else{
-                    return httpResponse;
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-        });
+		if (window.location.pathname !== "/") {
+			const fullAuthorId = store.getState().loginReducers.userId || Cookies.get("userID");
+			const urlPath = "/api/followers/" + encodeURIComponent(fullAuthorId),
+				requireAuth = true;
+		    HTTPFetchUtil.getRequest(urlPath, requireAuth, signal)
+		        .then((httpResponse) => {
+		            if (httpResponse.status === 200) {
+		                httpResponse.json().then((results) => {
+		                	if (results.authors.length > 0) {
+								clearInterval(this.timer);
+								this.timer = null;
+								this.setState({
+									haveFriendRequest: true,
+									numFriendRequests: results.authors.length,
+								});
+							}
+		                })
+		            }
+		            else{
+		                return httpResponse;
+		            }
+		        })
+		        .catch((error) => {
+		            console.error(error);
+		    });
+		}
 	}
 
 	render() {
 		const userId = store.getState().loginReducers.userId || Cookies.get("userID");
-		const displayName = store.getState().loginReducers.displayName || Cookies.get("displayName");
 		const currentLocation = window.location.pathname.split('/')[1];
 		
 		let $friendRequestNotification = (<span></span>);
@@ -77,7 +93,7 @@ class SideBar extends Component {
 						<Menu.Item as={Link} to={"/author/" + encodeURIComponent(userId)} active={currentLocation === "author"} className="sideBarProfile">					
 							<span className={"ui circular tiny bordered centered image"}> 	
 								<img className="profileBubbleInSidebar" alt="It's you!" src={require('../assets/images/default2.png')}/>
-								<span className="profileBubbleLetter"> {displayName.charAt(0).toUpperCase()} </span>
+								<span className="profileBubbleLetter"> {this.state.displayLetter} </span>
 							</span>
 							<figcaption>Profile</figcaption>
 						</Menu.Item>
@@ -113,4 +129,11 @@ class SideBar extends Component {
 	}
 }
 
-export default SideBar;
+const mapStateToProps = state => {
+	return {
+		displayName: state.profileReducers.displayName, 
+	}
+}
+
+
+export default connect(mapStateToProps)(SideBar);
