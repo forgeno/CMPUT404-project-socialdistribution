@@ -56,12 +56,12 @@ class SideBar extends Component {
 		            if (httpResponse.status === 200) {
 		                httpResponse.json().then((results) => {
 		                	if (results.authors.length > 0) {
-								clearInterval(this.timer);
-								this.timer = null;
-								this.setState({
-									haveFriendRequest: true,
-									numFriendRequests: results.authors.length,
-								});
+								if (results.authors.length !== this.state.numFriendRequests) {
+									this.setState({
+										haveFriendRequest: true,
+										numFriendRequests: results.authors.length,
+									});
+								}
 							}
 		                })
 		            }
