@@ -7,8 +7,11 @@ import PropTypes from 'prop-types';
 class ProfileBubble extends Component {	
 
 	render() {
-		const author_path = "/author/" + encodeURIComponent(this.props.userID);
+		console.log("inside profile bubble");
 
+		const author_path = "/author/" + encodeURIComponent(this.props.userID);
+		console.log(this.props.userID)
+		console.log(author_path);
 		let picPath = require('../assets/images/default2.png');
 		if (this.props.profilePicture) {
 			picPath = this.props.profilePicture;
