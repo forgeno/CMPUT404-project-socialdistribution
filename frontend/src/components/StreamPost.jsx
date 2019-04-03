@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Feed, Modal, Label, Icon, Popup } from 'semantic-ui-react';
+import { Feed, Modal, Label, Icon, Image, Popup } from 'semantic-ui-react';
 import ReactMarkdown from 'react-markdown';
 import ProfileBubble from './ProfileBubble';
 import AnimatedButton from './AnimatedButton';
@@ -7,8 +7,10 @@ import CreatePostModal from './CreatePostModal';
 import Cookies from 'js-cookie';
 import store from '../store/index.js';
 import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 import TextTruncate from 'react-text-truncate';
 import {CopyToClipboard} from 'react-copy-to-clipboard'; 
+import CommentsOnPost from './CommentsOnPost';
 import './styles/StreamPost.css';
 
 function categoryToLabel(category) {
@@ -125,9 +127,9 @@ class StreamPost extends Component {
 			case 'text/markdown':
 				return <ReactMarkdown source={content}/>;
 			case 'image/png;base64':
-				return <img src={content} alt={content} />;
+				return <img src={content} alt={''} />;
 			case 'image/jpeg;base64':
-				return <img src={content} alt={content}/>;
+				return <img src={content} alt={''}/>;
 			default:
 				return "Bad contentType. Can't display post";
 		}
@@ -153,6 +155,12 @@ class StreamPost extends Component {
 	
 	render() {
 		const storeItems = store.getState().loginReducers;
+		
+		let $cursorClass = '';
+		if (this.props.isGithub) {
+			$cursorClass = "notClickable";
+		}
+		
 		let $modalTrigger = (<div className="editButton"><AnimatedButton 
 				iconForButton={"pencil icon"} 
 				buttonText={"EDIT"} 
@@ -173,49 +181,75 @@ class StreamPost extends Component {
 				$visibilityIcon = "server";
 				break;
 			case "PRIVATE":
-				$visibilityIcon = "setting";
+				$visibilityIcon = "lock";
 				break;
 			default:
 				$visibilityIcon = "help";
 		}
 
+		let $cornerIcons = (
+			<span>
+			<Popup
+			trigger={
+			<CopyToClipboard text={this.getPostFrontEndUrl()}>
+			<Icon name={"share square"} className="linkToPost" onClick={this.copyPostToClipboard}/>
+			</CopyToClipboard>
+			} 
+			content={this.state.copyText}
+			hideOnScroll
+			onClose={() => this.setState({ copyText: "Copy a link to this post"})}
+			/>
+
+			<Popup
+			trigger={<Icon name={"address book"} aria-label={this.props.origin} className="originOfPost"/>}
+			content={this.props.origin}
+			hideOnScroll
+			/>
+
+			<Popup
+			trigger={<Icon name={$visibilityIcon} aria-label={this.props.visibility} className="visibilityIcon"/>}
+			content={this.props.visibility}
+			hideOnScroll
+			/>
+			</span>
+		);
+
+
+		const postUrl = new URL(this.props.origin),
+				authorIdUrl = new URL(store.getState().loginReducers.userId || Cookies.get("userID")),
+				authorHost = `${authorIdUrl.protocol}//${authorIdUrl.host}/`,
+				postHost = `${postUrl.protocol}//${postUrl.host}/`;
+
+		let postId = encodeURIComponent(this.props.origin);
+
+		if(postHost === authorHost) {
+			postId = this.props.origin.split("/").pop();
+		}
+
 		return(
-			<Feed.Event>
+			<Feed.Event className={$cursorClass}>
 				<Feed.Label>
+				
+					{this.props.isGithub
+					?
+					<Image bordered circular src={require('../assets/images/gitcat.jpg')}/>
+					:
 					<span className="profileBubbleInPost">
 					<ProfileBubble displayName={this.props.displayName} 
 					userID={this.props.author}
 					profilePicture={this.props.profilePicture} 
 					profileBubbleClassAttributes={"ui circular bordered image"} />
 					</span>
+					}
+					
+					
 				</Feed.Label>
 				<div className="postContent" onClick={this.openContentModal}>
 				<Feed.Content>
 					<div>
 						<Feed.Summary>
 							<span className="title"> <h3>
-														<Popup
-														trigger={
-														<CopyToClipboard text={this.getPostFrontEndUrl()}>
-														<Icon name={"share square"} className="linkToPost" onClick={this.copyPostToClipboard}/>
-														</CopyToClipboard>
-														} 
-														content={this.state.copyText}
-														hideOnScroll
-														onClose={() => this.setState({ copyText: "Copy a link to this post"})}
-														/>
-														
-														<Popup
-														trigger={<Icon name={"address book"} aria-label={this.props.origin} className="originOfPost"/>}
-														content={this.props.origin}
-														hideOnScroll
-														/>
-														
-														<Popup
-														trigger={<Icon name={$visibilityIcon} aria-label={this.props.visibility} className="visibilityIcon"/>}
-														content={this.props.visibility}
-														hideOnScroll
-														/>
+														{!this.props.isGithub && $cornerIcons}
 														
 														<TextTruncate 
 															line={1} 
@@ -259,42 +293,49 @@ class StreamPost extends Component {
 					}						
 					
 					<Feed.Date className="datetimeOfPost">
-						{this.props.date}
+						<Moment format="YYYY-MM-DD HH:mm">
+							{this.props.date}
+						</Moment>
 					</Feed.Date>								
 					</div>
 					
-					
-					<Modal 
-					open={this.state.showContentModal}
-					onClose={this.closeContentModal}
- 					className={"contentPostModal"}
- 					>
-					<Modal.Header className='modalHeader'> 
-					
-					<span className="profileBubbleInShowContent">
-						<ProfileBubble 
-						displayName={this.props.displayName} 
-						userID={this.props.author}
-						profilePicture={this.props.profilePicture} 
-						profileBubbleClassAttributes={"ui circular bordered mini image"} />
-					</span>
-					<span className="titleInShowContent">{this.props.title}</span>
-					<div className="byAuthorInShowContent"> by: {this.props.displayName} </div> 
-					<div className="descriptionInShowContent"> {this.props.description} </div>
-					
-					</Modal.Header>
-					<Modal.Content>
+					{
+						!this.props.isGithub
+							&&
+						<Modal 
+						open={this.state.showContentModal}
+						onClose={this.closeContentModal}
+						className={"contentPostModal"}
+						>
+						<Modal.Header className='modalHeader'> 
 						
+						<span className="profileBubbleInShowContent">
+							<ProfileBubble 
+							displayName={this.props.displayName} 
+							userID={this.props.author}
+							profilePicture={this.props.profilePicture} 
+							profileBubbleClassAttributes={"ui circular bordered mini image"} />
+						</span>
+						<span className="titleInShowContent">{this.props.title}</span>
+						<div className="byAuthorInShowContent"> by: {this.props.displayName} </div> 
+						<div className="descriptionInShowContent"> {this.props.description} </div>
+						
+						</Modal.Header>
+						<Modal.Content>
+
 					<section  className='contentModalContent'>
 						{this.contentRender(this.props.content, this.props.contentType)}
 					</section>		
 
-					{this.categoryLabels()}
+					<CommentsOnPost postID={postId} origin={this.props.origin} />
+					
 					<span className="postID"> {this.props.postID} </span>
 
-					
-					</Modal.Content>
+							{this.categoryLabels()}
+				
+						</Modal.Content>
 					</Modal>
+					}
 					
 					<Modal
 					open={this.state.showDeleteModal}
@@ -320,6 +361,7 @@ class StreamPost extends Component {
 	}
 }
 
+
 StreamPost.propTypes = {
 	postID: PropTypes.string.isRequired,
 	displayName: PropTypes.string.isRequired,
@@ -335,6 +377,7 @@ StreamPost.propTypes = {
 	visibleTo: PropTypes.array.isRequired,
 	unlisted: PropTypes.bool.isRequired,
 	
+	isGithub: PropTypes.bool,
 	origin: PropTypes.string.isRequired,
 	
 	author: PropTypes.string.isRequired,

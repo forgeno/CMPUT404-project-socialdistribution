@@ -1,7 +1,20 @@
+.streamFeed {
+  padding-right: 5% !important;
+  margin-left: 2% !important;
+  width: 70% !important;
+}
+
 .ui.fluid.button {
 	position: relative;
 	left: 25%;
 	top: 15%;
 	max-width: 35%;
 	margin-top: 3%;
+}
+
+.failedGetPostsMessage {
+	max-width: 50%;
+	margin-left: 15% !important;
+	margin-top: 20% !important;
+	text-align: center;
 }
