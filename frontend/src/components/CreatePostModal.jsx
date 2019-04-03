@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Checkbox, TextArea, Form, Input, Icon } from 'semantic-ui-react';
+import { Modal, Checkbox, TextArea, Form, Input, Icon, TransitionablePortal } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 import ProfileBubble from './ProfileBubble';
 import AnimatedButton from './AnimatedButton';
@@ -410,20 +410,26 @@ class CreatePostModal extends Component {
 		}
 	
 		return(
-			<Modal 
-				trigger={this.props.modalTrigger}
-				open={this.props.showModal}
-				onClose={this.closeModal}
-				className={"createPostModal"}
+			<TransitionablePortal 
+				open={this.props.showModal} 
+				trigger={this.props.modalTrigger} 
+				transition={{ animation:'fade', duration: 500 }}
+				closeOnDocumentClick={false}
 			>
-				{$modalHeader}
-				<Modal.Content className="postModalContent">
-					{this.createPageOneOrPageTwoInputs()}	
-				</Modal.Content>
-				<Modal.Actions>
-					{this.createPageOneOrPageTwoButtons()}
-				</Modal.Actions>
-			</Modal>
+				<Modal 
+					open={this.props.showModal}
+					onClose={this.closeModal}
+					className={"createPostModal"}
+				>
+					{$modalHeader}
+					<Modal.Content className="postModalContent">
+						{this.createPageOneOrPageTwoInputs()}	
+					</Modal.Content>
+					<Modal.Actions>
+						{this.createPageOneOrPageTwoButtons()}
+					</Modal.Actions>
+				</Modal>
+			</TransitionablePortal>
 	)}
 }
 

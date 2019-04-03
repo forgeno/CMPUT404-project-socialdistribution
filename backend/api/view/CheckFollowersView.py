@@ -5,6 +5,7 @@ from ..serializers import AuthorProfileSerializer
 import requests
 import json
 from urllib.parse import urlparse
+from django.conf import settings
 
 
 class CheckFollowersView(generics.GenericAPIView):
@@ -18,21 +19,27 @@ class CheckFollowersView(generics.GenericAPIView):
         author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
 
         follow_list_data = []
-
+        print("authorid", authorid)
         for follower in Follow.objects.filter(authorB=authorid, status="FOLLOWING"):
             follower_fulll_id = follower.authorA
             tmp_follower_data = follower_fulll_id.split("author/")
             follower_host = tmp_follower_data[0]
             follower_author_profile_id = tmp_follower_data[1]
+            print("follower_fulll_id", follower_fulll_id)
+            print("author_host", author_host)
+            print("follower_host", follower_host)
 
-            if author_host == follower_host:
+            if author_host == follower_host or follower_host == settings.BACKEND_URL:
                 follower_profile = AuthorProfile.objects.get(id=follower_author_profile_id)
                 serialized_author_profile = AuthorProfileSerializer(follower_profile)
                 follow_list_data.append(serialized_author_profile.data)
             else:
                 try:
+                    print("this is foreign author")
                     server_user = ServerUser.objects.get(host=follower_host)
+                    print(server_user)
                     url = "{}{}author/{}".format(server_user.host, server_user.prefix, follower_author_profile_id)
+                    print(url)
                     headers = {'Content-type': 'application/json'}
                     response = requests.get(url,
                                             auth=(server_user.send_username, server_user.send_password),
@@ -41,6 +48,8 @@ class CheckFollowersView(generics.GenericAPIView):
                         follow_list_data.append(json.loads(response.content))
                 except Exception as e:
                     # ignore and just not add into follower list if cant get from server
+                    print("check followers exception")
+                    print(e)
                     pass
 
         response_data = {

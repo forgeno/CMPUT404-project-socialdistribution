@@ -15,18 +15,18 @@ class App extends Component {
 
 	render() {
 		return (
-			<BrowserRouter>
-				<Switch>
-					<Route exact path="/" component={Login}/>
-					<Route exact path="/author/:authorId" component={withAuth(Author)}/>
-					<Route exact path ="/stream" component={withAuth(Stream)}/>
-					<Route exact path="/posts/:postId" component={withAuth(SinglePost)}/>
-					<Route exact path ="/friends" component={withAuth(Friends)}/>
-					<Route exact path ="/public" component={withAuth(PublicStream)}/>
-					<Route exact path ="/logout" component={Logout}/>
-					<Route component={NotFound} />
-				</Switch>
-			</BrowserRouter>
+				<BrowserRouter>
+					<Switch>
+						<Route exact path="/" component={Login}/>
+						<Route exact path="/author/:authorId" component={withAuth(Author, "author")}/>
+						<Route exact path ="/stream" component={withAuth(Stream, "stream")}/>
+						<Route exact path="/posts/:postId" component={withAuth(SinglePost)}/>
+						<Route exact path ="/friends" component={withAuth(Friends, "friends")}/>
+						<Route exact path ="/public" component={withAuth(PublicStream, "public")}/>
+						<Route exact path ="/logout" component={Logout}/>
+						<Route component={NotFound} />
+					</Switch>
+				</BrowserRouter>
 		);
   	}
 }

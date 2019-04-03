@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import './styles/AboutProfileComponent.css';
+import {connect} from 'react-redux';
+import * as ProfileActions from "../actions/ProfileActions";
 import {Tab, Table, Button, Input, TextArea, Icon, Form, Message} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import HTTPFetchUtil from "../util/HTTPFetchUtil";
@@ -95,6 +97,10 @@ class AboutProfileComponent extends Component {
             .then((httpResponse) => {
                 if (httpResponse.status === 200) {
                     httpResponse.json().then((results) => {
+                        this.props.editProfile({
+                        	displayName: this.state.displayName
+                        
+                        });
                         this.resetState();
                         this.setState({
                             isEdit: false,
@@ -102,7 +108,7 @@ class AboutProfileComponent extends Component {
                             errorMessage: ""
                         });
                         //on success call on success prop
-                        this.props.onSuccess()
+                        this.props.onSuccess();
                     });
                 } else {
                     httpResponse.json().then((results) => {
@@ -268,6 +274,14 @@ class AboutProfileComponent extends Component {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+	return {
+		editProfile: (results) => {
+			return dispatch(ProfileActions.editProfile(results));
+		}
+	}
+}
+
 AboutProfileComponent.propTypes = {
     fullAuthorId: PropTypes.string.isRequired,
 	profile_id: PropTypes.string.isRequired,
@@ -282,4 +296,4 @@ AboutProfileComponent.propTypes = {
     onSuccess: PropTypes.func.isRequired
 };
 
-export default AboutProfileComponent;
+export default connect(null, mapDispatchToProps)(AboutProfileComponent);

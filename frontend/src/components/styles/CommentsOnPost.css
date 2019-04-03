@@ -5,10 +5,23 @@
 .profileBubbleInComment {
 	float: left;
 	padding-right: 2%;
+	
 }
 
 .ui.comments .comment > .avatar ~ .content {
 	margin-top: 2%;
 	margin-bottom: 3%;
 	margin-left: 4.5em;
+}
+
+.ui.comments .comment > .content {
+	line-height: 11px;
+}
+
+.commentDate {
+	font-size: 0.8em !important;
+}
+
+.commentContent {
+	margin-left: 8% !important;
 }

@@ -21,7 +21,7 @@
 	border: none !important;
 }
 
-#noList{
+.noFriends{
     padding-top: 2%;
     min-height: 30vh;
     display: block;
