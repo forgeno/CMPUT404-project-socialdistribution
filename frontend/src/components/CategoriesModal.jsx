@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Dropdown, Icon } from 'semantic-ui-react';
+import { Button, Modal, Dropdown, Icon, TransitionablePortal } from 'semantic-ui-react';
 import './styles/CategoriesModal.css';
 import AnimatedButton from './AnimatedButton';
 import HTTPFetchUtil from '../util/HTTPFetchUtil.js';
@@ -104,35 +104,40 @@ class CategoriesModal extends Component {
 		const { currentValues, isFetching } = this.state;
 
 		return (
-			<Modal 
-				trigger={<Button basic icon onClick={() => this.setState({showModal: true})} positive={this.props.currentValues.length > 0} className="CategoriesModalButton"> <Icon name={"list alternate"}/> {"Categories"} </Button>}
-				open={this.state.showModal}
-				onClose={this.closeModal}
-				closeOnDimmerClick={false}
+			<TransitionablePortal open={this.state.showModal} 
+			trigger={<Button basic icon onClick={() => this.setState({showModal: true})} positive={this.props.currentValues.length > 0} className="CategoriesModalButton"> <Icon name={"list alternate"}/> {"Categories"} </Button>} 
+			transition={{ animation:'fade', duration: 500 }}
+			closeOnDocumentClick={false}
 			>
-				<Modal.Header> Select Categories </Modal.Header>
-				<Modal.Content>
-				  <Dropdown
-					options={this.state.options}
-					placeholder={"Add or Select Categories"}
-					search
-					selection
-					multiple
-					allowAdditions
-					closeOnChange={true}
-					fluid
-					value={currentValues}
-					onAddItem={this.handleNewCategoryAddition}
-					onChange={this.handleChange}
-					disabled={isFetching}
-					loading={isFetching}
-				  />
-				</Modal.Content>
-				<Modal.Actions>
-					<AnimatedButton iconForButton="trash alternate outline icon" buttonText="CLEAR" clickFunction={this.clearSelection} extraAttributes={"negative"}/>
-					<AnimatedButton iconForButton="checkmark icon" buttonText="DONE" clickFunction={this.closeModal} extraAttributes={"positive"}/>
-				</Modal.Actions>
-			</Modal>
+				<Modal 
+					open={this.state.showModal}
+					onClose={this.closeModal}
+					closeOnDimmerClick={false}
+				>
+					<Modal.Header> Select Categories </Modal.Header>
+					<Modal.Content>
+					  <Dropdown
+						options={this.state.options}
+						placeholder={"Add or Select Categories"}
+						search
+						selection
+						multiple
+						allowAdditions
+						closeOnChange={true}
+						fluid
+						value={currentValues}
+						onAddItem={this.handleNewCategoryAddition}
+						onChange={this.handleChange}
+						disabled={isFetching}
+						loading={isFetching}
+					  />
+					</Modal.Content>
+					<Modal.Actions>
+						<AnimatedButton iconForButton="trash alternate outline icon" buttonText="CLEAR" clickFunction={this.clearSelection} extraAttributes={"negative"}/>
+						<AnimatedButton iconForButton="checkmark icon" buttonText="DONE" clickFunction={this.closeModal} extraAttributes={"positive"}/>
+					</Modal.Actions>
+				</Modal>
+			</TransitionablePortal>
 		)
 	}
 }

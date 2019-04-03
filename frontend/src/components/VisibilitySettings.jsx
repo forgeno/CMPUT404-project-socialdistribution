@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Modal } from 'semantic-ui-react';
+import { Dropdown, Modal, TransitionablePortal } from 'semantic-ui-react';
 import AnimatedButton from './AnimatedButton';
 import './styles/VisibilitySettings.css';
 import HTTPFetchUtil from '../util/HTTPFetchUtil.js';
@@ -127,31 +127,37 @@ class VisibilitySettings extends Component {
 					<Dropdown.Item text='FOAF' value="FOAF" onClick={this.handleVisibilityChange}/>
 					<Dropdown.Item text='SERVERONLY' value="SERVERONLY" onClick={this.handleVisibilityChange}/>
 					<Dropdown.Item text='PRIVATE' value="PRIVATE" onClick={ () => this.setState({showModal: true, open: false})}/>
-				
-					<Modal 
-					open={this.state.showModal}
-					onClose={this.closeModal}
+							
+					<TransitionablePortal 
+					open={this.state.showModal} 
+					transition={{ animation:'fade', duration: 500 }}
+					closeOnDocumentClick={false}
 					>
-					<Modal.Header> This post will be visible to you and... </Modal.Header>
-						<Modal.Content>
-							<Dropdown
-								fluid
-								selection
-								multiple={multiple}
-								closeOnChange={true}
-								search={search}
-								options={options}
-								value={value}
-								placeholder='Add Users'
-								onChange={this.handleChange}
-								onSearchChange={this.handleSearchChange}
-							/>
-						</Modal.Content>
-						<Modal.Actions>
-							<AnimatedButton iconForButton="trash alternate outline icon" buttonText="CLEAR" clickFunction={this.clearSelection} extraAttributes={"negative"}/>
-							<AnimatedButton iconForButton="checkmark icon" buttonText="DONE" clickFunction={this.closeModal} extraAttributes={"positive"}/>
-						</Modal.Actions>
-					</Modal>
+						<Modal 
+						open={this.state.showModal}
+						onClose={this.closeModal}
+						>
+						<Modal.Header> This post will be visible to you and... </Modal.Header>
+							<Modal.Content>
+								<Dropdown
+									fluid
+									selection
+									multiple={multiple}
+									closeOnChange={true}
+									search={search}
+									options={options}
+									value={value}
+									placeholder='Add Users'
+									onChange={this.handleChange}
+									onSearchChange={this.handleSearchChange}
+								/>
+							</Modal.Content>
+							<Modal.Actions>
+								<AnimatedButton iconForButton="trash alternate outline icon" buttonText="CLEAR" clickFunction={this.clearSelection} extraAttributes={"negative"}/>
+								<AnimatedButton iconForButton="checkmark icon" buttonText="DONE" clickFunction={this.closeModal} extraAttributes={"positive"}/>
+							</Modal.Actions>
+						</Modal>
+					</TransitionablePortal>
 				</Dropdown.Menu>
 			</Dropdown>
 		)

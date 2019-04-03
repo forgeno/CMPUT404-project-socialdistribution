@@ -283,7 +283,7 @@ class StreamFeed extends Component {
 		return(	
 		<div>
 			<Feed className="streamFeed">
-				{this.state.isFetching && <Loader/>}
+				<Loader active={this.state.isFetching} size="massive" inverted className="loaderInStreamFeed"/>
 				{this.state.error && <Message className="failedGetPostsMessage" negative>
 										<Message.Header>Failed to get posts</Message.Header>
 									</Message>

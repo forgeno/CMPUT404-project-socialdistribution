@@ -159,7 +159,7 @@ class CommentsOnPost extends Component {
 					<Header as='h3' dividing>
 						Comments
 					</Header>
-					{this.state.isFetching && <Loader/>}
+					<Loader active={this.state.isFetching} inverted/>
 					{!this.state.isFetching && $commentSection}
 				</Comment.Group>
 				<Form>
