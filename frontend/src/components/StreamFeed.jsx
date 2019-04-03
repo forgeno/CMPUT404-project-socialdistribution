@@ -68,6 +68,8 @@ class StreamFeed extends Component {
 			unlisted={payload.unlisted}
 			
 			origin={payload.origin}
+		
+			comments={payload.comments}
 			
 			author={payload.author.id}
 			viewingUser={this.props.storeItems.userID}
@@ -121,6 +123,7 @@ class StreamFeed extends Component {
 															},
 															
 															origin: "https://github.com/",
+															comments: [],
 															
 															deletePost: null,
 															getPosts: null,

@@ -326,13 +326,11 @@ class StreamPost extends Component {
 							<section  className='contentModalContent'>
 								{this.contentRender(this.props.content, this.props.contentType)}
 							</section>		
-					<section  className='contentModalContent'>
-						{this.contentRender(this.props.content, this.props.contentType)}
-					</section>		
+							<section  className='contentModalContent'>
+								{this.contentRender(this.props.content, this.props.contentType)}
+							</section>		
 
-					<CommentsOnPost postID={postId} origin={this.props.origin} />
-					
-					<span className="postID"> {this.props.postID} </span>
+							<CommentsOnPost comments={this.props.comments} postID={postId} origin={this.props.origin} author={this.props.author} />
 
 							{this.categoryLabels()}
 				

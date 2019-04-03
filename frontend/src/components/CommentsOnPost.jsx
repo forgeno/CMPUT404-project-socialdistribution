@@ -13,7 +13,7 @@ class CommentsOnPost extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			comments: [],
+			comments: this.props.comments,
 			commentText: '',
 			isFetching: false,
 			failedFetch: false,
@@ -101,11 +101,18 @@ class CommentsOnPost extends Component {
 	}
 	
 	createCommentList(comment) {
-		const commentID = comment.id;
-		const author = comment.author.displayName;
-		const authorID = comment.author.id;
-		const date = comment.published;
-		const commentText = comment.comment;
+		const commentID = comment.id,
+			author = comment.author.displayName,
+			authorID = comment.author.id,
+			date = comment.published,
+			commentText = comment.comment;
+		
+		let $profilePicture;
+		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userId);
+		let postHost = new URL(author);
+		if (myHost.hostname !== postHost.hostname) {
+			$profilePicture = require('../assets/images/default3.png');
+		}
 		return (
 			<span key={commentID} className="singleComment">
 				<Comment>
@@ -113,7 +120,7 @@ class CommentsOnPost extends Component {
 						<ProfileBubble 
 							displayName={author} 
 							userID={authorID}
-							profilePicture={null} 
+							profilePicture={$profilePicture} 
 							profileBubbleClassAttributes={"ui circular bordered mini image"} 
 						/>
 					</span>
@@ -131,6 +138,7 @@ class CommentsOnPost extends Component {
 
 
 	render() {
+		
 		let $commentSection;
 		if (this.state.failedFetch) {
 			$commentSection = 	<Message negative>
