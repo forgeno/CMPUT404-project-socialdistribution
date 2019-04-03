@@ -173,14 +173,16 @@ class FriendListComponent extends Component {
 				this.props.data.map(this.renderFriendCard));
 			}
 		else {
-			return (<span></span>);
+			if(!(this.props.data && this.props.data.length) && !this.props.isFetching) {
+				return (<h1 className="noFriends"> None </h1>);
+			}
 		}
 		
 	}
     render() {
 		return(
 			<div className="ui grid">
-			 	<Loader active={this.props.isFetching} inverted size="massive"/>	
+			 	<Loader active={this.props.isFetching} inverted size="massive" className="loaderFriends"/>	
 				{this.renderAllCards()}
 			</div>
 		)
