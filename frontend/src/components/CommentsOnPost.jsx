@@ -24,10 +24,6 @@ class CommentsOnPost extends Component {
 		this.submitComment = this.submitComment.bind(this);
 	}
 
-	componentDidMount() {
-		this.getComments();
-	}
-
 	getComments() {
 		this.setState({
 			isFetching: true,
