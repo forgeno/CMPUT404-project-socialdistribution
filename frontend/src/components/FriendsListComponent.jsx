@@ -33,7 +33,7 @@ class FriendListComponent extends Component {
 	}
 
 	renderGithubDetails(authorObj){
-		if(authorObj.github !== ""){
+		if(authorObj.github !== "" && authorObj.github !== undefined){
 			return(
 				<div>
 					<a href={authorObj.github} target={"_blank"}>
@@ -48,7 +48,7 @@ class FriendListComponent extends Component {
 	}
 
 	renderEmailDetails(authorObj){
-		if(authorObj.email !== ""){
+		if(authorObj.email !== "" && authorObj.email !== undefined){
 			return(
 				<div>
 					<a href={"mailto:"+authorObj.github} target={"_blank"}>
