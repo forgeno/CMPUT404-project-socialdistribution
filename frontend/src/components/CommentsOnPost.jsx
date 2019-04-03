@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import HTTPFetchUtil from "../util/HTTPFetchUtil";
 import PropTypes from 'prop-types';
 import store from '../store/index.js';
+import Moment from 'react-moment';
 import './styles/CommentsOnPost.css';
 
 class CommentsOnPost extends Component {	
@@ -29,7 +30,7 @@ class CommentsOnPost extends Component {
 			isFetching: true,
 		});
 		const requireAuth = true;
-		const urlPath = "/api/posts/" + this.props.postID + "/";
+		const urlPath = "/api/posts/" + this.props.postID;
 			HTTPFetchUtil.getRequest(urlPath, requireAuth)
 			.then((httpResponse) => {
 				if(httpResponse.status === 200) {
@@ -105,7 +106,7 @@ class CommentsOnPost extends Component {
 		
 		let $profilePicture;
 		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userId);
-		let postHost = new URL(author);
+		let postHost = new URL(authorID);
 		if (myHost.hostname !== postHost.hostname) {
 			$profilePicture = require('../assets/images/default3.png');
 		}
@@ -123,8 +124,12 @@ class CommentsOnPost extends Component {
 					
 					<Comment.Content>
 						<Comment.Author> {author} </Comment.Author>
-						<Comment.Metadata> {date} </Comment.Metadata>
-						<Comment.Text> {commentText} </Comment.Text>
+						<Comment.Metadata className="commentDate"> 
+							<Moment format="YYYY-MM-DD HH:mm">
+								{date} 					
+							</Moment>
+						</Comment.Metadata>
+						<Comment.Text className="commentContent"> {commentText} </Comment.Text>
 					</Comment.Content>
 					
 				</Comment>
@@ -171,6 +176,10 @@ class CommentsOnPost extends Component {
 			</span>
 		);
 	}
+}
+
+CommentsOnPost.defaultProps = {
+	comments: [],
 }
 
 CommentsOnPost.propTypes = {

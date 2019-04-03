@@ -5,6 +5,12 @@
 	font-family: Luxi Mono;
 }
 
+.profileBubbleInComment .textContainer {
+	font-size: 0.7rem;
+	left: 13px;
+	top: 8px;
+}
+
 .profileBubbleInPost .textContainer {
 	font-size: 1.5rem;
 	left: 25px;
