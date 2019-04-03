@@ -93,7 +93,7 @@ def get_foreign_friend_list(author_id):
         author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
         server_user = ServerUser.objects.get(host=author_host)
         author_short_id = author_id.split("author/")[-1]
-        url = "{}{}author/{}/friends/".format(server_user.host, server_user.prefix, author_short_id)
+        url = "{}{}author/{}/friends".format(server_user.host, server_user.prefix, author_short_id)
         headers = {'Content-type': 'application/json'}
         response = requests.get(url,
                                 auth=(server_user.send_username, server_user.send_password),
