@@ -94,6 +94,8 @@ class FriendListComponent extends Component {
 	}
 
 	renderFriendCard(authorObj, authorIndex) {
+		console.log("render friend dcard")
+		console.log(authorObj);
 		return(
 		<div className="three wide column" key={"grid"+authorIndex}>
 			<Card>
