@@ -35,7 +35,7 @@ class FriendListComponent extends Component {
 	}
 
 	renderGithubDetails(authorObj){
-		if(authorObj.github !== ""){
+		if(authorObj.github !== "" && authorObj.github !== undefined){
 			return(
 				<div>
 					<a href={authorObj.github} target={"_blank"}>
@@ -50,7 +50,7 @@ class FriendListComponent extends Component {
 	}
 
 	renderEmailDetails(authorObj){
-		if(authorObj.email !== ""){
+		if(authorObj.email !== "" && authorObj.email !== undefined){
 			return(
 				<div>
 					<a href={"mailto:"+authorObj.github} target={"_blank"}>
@@ -95,6 +95,28 @@ class FriendListComponent extends Component {
 		}
 	}
 
+	renderFullName(authorObj){
+		let returnNameString = ""
+		if(authorObj.firstName !== undefined){
+			returnNameString += authorObj.firstName+" "
+		}
+		if(authorObj.lastName !== undefined){
+			returnNameString += authorObj.lastName
+		}
+		return returnNameString;
+		
+	}
+
+	renderBioInfo(authorObj){
+		let returnBioString = ""
+		if(authorObj.bio !== undefined){
+			return authorObj.bio
+		}
+		else{
+			return returnBioString
+		}
+	}
+
 	renderFriendCard(authorObj, authorIndex) {
 		let $profilePicture = null;
 		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userID);
@@ -109,8 +131,8 @@ class FriendListComponent extends Component {
 				<span className="profileBubbleFriend">
             	<ProfileBubble
                     displayName={authorObj.displayName}
-                	userID={decodeURIComponent(authorObj.authorId)}
-                	profilePicture={$profilePicture}
+                	userID={authorObj.id}
+            		profilePicture={$profilePicture}
                     profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}
                 />
                 </span>
@@ -119,11 +141,11 @@ class FriendListComponent extends Component {
 					{this.renderDisplayName(authorObj)}
 					</Card.Header>
 					<Card.Meta>
-						<span className="name">{authorObj.firstName+" "+authorObj.lastName}</span>
+						<span className="name">{this.renderFullName(authorObj)}</span>
 					</Card.Meta>
 					<Card.Description>
 						<Truncate lines={3} ellipsis={<span>...</span>}>
-							{authorObj.bio}
+							{this.renderBioInfo(authorObj)}
 						</Truncate>
 					</Card.Description>
 				</Card.Content>
