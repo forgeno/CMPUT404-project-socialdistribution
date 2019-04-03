@@ -100,7 +100,7 @@ class FriendListComponent extends Component {
 				<span className="profileBubbleFriend">
             	<ProfileBubble
                     displayName={authorObj.displayName}
-                	userID={decodeURIComponent(authorObj.authorId)}
+                	userID={authorObj.authorId}
                     profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}
                 />
                 </span>
