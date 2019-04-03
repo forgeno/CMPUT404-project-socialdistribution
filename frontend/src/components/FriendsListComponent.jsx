@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import "./styles/FriendsListComponent.css";
 import Truncate from 'react-truncate';
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Loader } from "semantic-ui-react";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import ProfileBubble from "../components/ProfileBubble";
@@ -167,18 +168,19 @@ class FriendListComponent extends Component {
 				<h1 id="noList" style={blackText}>Foreign Friend List Unavailable</h1>
 			)
 		}
-		if(this.props.data.length > 0){
+		if (this.props.data.length > 0){
 			return (
 				this.props.data.map(this.renderFriendCard));
 			}
-		else{
-			return (<h1 id="noList" style={blackText}>None</h1>)
+		else {
+			return (<span></span>);
 		}
 		
 	}
     render() {
 		return(
-			<div className="ui grid">	
+			<div className="ui grid">
+			 	<Loader active={this.props.isFetching} inverted size="massive"/>	
 				{this.renderAllCards()}
 			</div>
 		)
@@ -194,4 +196,11 @@ FriendListComponent.propTypes = {
 	blackText: PropTypes.bool
 };
 
-export default (FriendListComponent);
+const mapStateToProps = state => {
+	
+    return {
+		isFetching: state.friendsReducers.isFetching,
+    }
+};
+
+export default connect(mapStateToProps, null)(FriendListComponent);

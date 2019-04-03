@@ -43,3 +43,12 @@ export const getCurrentFriendsRequests = (urlPath, requireAuth, signal) => {
         });
     }
 }
+
+export const startFetching = () => {
+    return (dispatch) => {
+                        return dispatch({
+                            type: "START_FETCHING",
+                            payload: ''
+                        })
+           }
+}
