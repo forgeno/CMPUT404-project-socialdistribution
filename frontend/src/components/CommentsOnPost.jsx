@@ -33,7 +33,7 @@ class CommentsOnPost extends Component {
 			isFetching: true,
 		});
 		const requireAuth = true;
-		const urlPath = "/api/posts/" + this.props.postID;
+		const urlPath = "/api/posts/" + this.props.postID + "/";
 			HTTPFetchUtil.getRequest(urlPath, requireAuth)
 			.then((httpResponse) => {
 				if(httpResponse.status === 200) {
