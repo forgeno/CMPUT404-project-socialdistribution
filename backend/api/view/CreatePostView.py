@@ -8,6 +8,8 @@ import requests
 import json
 from .Util import *
 from urllib.parse import urlparse
+from django.conf import settings
+
 
 class CreatePostView(generics.GenericAPIView):
     serializer_class = PostSerializer
