@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import "./styles/FriendsListComponent.css";
 import Truncate from 'react-truncate';
-import { Card, Button } from "semantic-ui-react";
+import { Card, Button, Loader } from "semantic-ui-react";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 import ProfileBubble from "../components/ProfileBubble";
+import Cookies from 'js-cookie';
+import store from '../store/index.js';
 
 class FriendListComponent extends Component {	
 
@@ -116,6 +119,13 @@ class FriendListComponent extends Component {
 	}
 
 	renderFriendCard(authorObj, authorIndex) {
+		let $profilePicture = null;
+		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userID);
+		let postHost = new URL(authorObj.id);
+		if (myHost.hostname !== postHost.hostname) {
+			$profilePicture = require('../assets/images/default3.png');
+		}
+		
 		return(
 		<div className="three wide column" key={"grid"+authorIndex}>
 			<Card>
@@ -123,6 +133,7 @@ class FriendListComponent extends Component {
             	<ProfileBubble
                     displayName={authorObj.displayName}
                 	userID={authorObj.id}
+            		profilePicture={$profilePicture}
                     profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}
                 />
                 </span>
@@ -157,18 +168,21 @@ class FriendListComponent extends Component {
 				<h1 id="noList" style={blackText}>Foreign Friend List Unavailable</h1>
 			)
 		}
-		if(this.props.data.length > 0){
+		if (this.props.data.length > 0){
 			return (
 				this.props.data.map(this.renderFriendCard));
 			}
-		else{
-			return (<h1 id="noList" style={blackText}>None</h1>)
+		else {
+			if(!(this.props.data && this.props.data.length) && !this.props.isFetching) {
+				return (<h1 className="noFriends"> None </h1>);
+			}
 		}
 		
 	}
     render() {
 		return(
-			<div className="ui grid">	
+			<div className="ui grid">
+			 	<Loader active={this.props.isFetching} inverted size="massive" className="loaderFriends"/>	
 				{this.renderAllCards()}
 			</div>
 		)
@@ -184,4 +198,11 @@ FriendListComponent.propTypes = {
 	blackText: PropTypes.bool
 };
 
-export default (FriendListComponent);
+const mapStateToProps = state => {
+	
+    return {
+		isFetching: state.friendsReducers.isFetching,
+    }
+};
+
+export default connect(mapStateToProps, null)(FriendListComponent);

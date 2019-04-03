@@ -42,3 +42,7 @@
 .ui.image{
     max-height: 25vh;
 }
+
+.ui.loader {
+	left: 43%;
+}

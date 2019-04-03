@@ -18,3 +18,7 @@
 	margin-top: 20% !important;
 	text-align: center;
 }
+
+.ui.loader {
+	left: 35%;
+}

@@ -86,7 +86,6 @@ const mapStateToProps = state => {
     return {
         isValidated: state.loginReducers.isLoggedIn,
         loginFailure: state.loginReducers.loginFailure,
-        
     }
 }
 

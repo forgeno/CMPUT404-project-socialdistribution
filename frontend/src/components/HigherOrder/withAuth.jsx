@@ -1,6 +1,6 @@
 import React from "react";
-import SideBar from "../SideBar";
 import {Redirect} from "react-router-dom";
+import SideBar from "../SideBar";
 import Cookies from 'js-cookie';
 import store from '../../store/index.js';
 
@@ -11,7 +11,7 @@ export default function withAuth(Component, navId) {
             if (isLoggedIn) {
                 return (
                     <div>
-                        <SideBar/>
+                    	<SideBar currentLoc={navId}/>
                         <Component {...this.props} />
                     </div>
                 );

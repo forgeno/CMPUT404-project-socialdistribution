@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import HTTPFetchUtil from "../util/HTTPFetchUtil";
 import PropTypes from 'prop-types';
 import store from '../store/index.js';
+import Moment from 'react-moment';
 import './styles/CommentsOnPost.css';
 
 class CommentsOnPost extends Component {	
@@ -13,7 +14,7 @@ class CommentsOnPost extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			comments: [],
+			comments: this.props.comments,
 			commentText: '',
 			isFetching: false,
 			failedFetch: false,
@@ -22,10 +23,6 @@ class CommentsOnPost extends Component {
 		this.getComments = this.getComments.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.submitComment = this.submitComment.bind(this);
-	}
-
-	componentDidMount() {
-		this.getComments();
 	}
 
 	getComments() {
@@ -101,11 +98,18 @@ class CommentsOnPost extends Component {
 	}
 	
 	createCommentList(comment) {
-		const commentID = comment.id;
-		const author = comment.author.displayName;
-		const authorID = comment.author.id;
-		const date = comment.published;
-		const commentText = comment.comment;
+		const commentID = comment.id,
+			author = comment.author.displayName,
+			authorID = comment.author.id,
+			date = comment.published,
+			commentText = comment.comment;
+		
+		let $profilePicture;
+		let myHost = new URL(Cookies.get("userID") || store.getState().loginReducers.userId);
+		let postHost = new URL(authorID);
+		if (myHost.hostname !== postHost.hostname) {
+			$profilePicture = require('../assets/images/default3.png');
+		}
 		return (
 			<span key={commentID} className="singleComment">
 				<Comment>
@@ -113,15 +117,19 @@ class CommentsOnPost extends Component {
 						<ProfileBubble 
 							displayName={author} 
 							userID={authorID}
-							profilePicture={null} 
+							profilePicture={$profilePicture} 
 							profileBubbleClassAttributes={"ui circular bordered mini image"} 
 						/>
 					</span>
 					
 					<Comment.Content>
 						<Comment.Author> {author} </Comment.Author>
-						<Comment.Metadata> {date} </Comment.Metadata>
-						<Comment.Text> {commentText} </Comment.Text>
+						<Comment.Metadata className="commentDate"> 
+							<Moment format="YYYY-MM-DD HH:mm">
+								{date} 					
+							</Moment>
+						</Comment.Metadata>
+						<Comment.Text className="commentContent"> {commentText} </Comment.Text>
 					</Comment.Content>
 					
 				</Comment>
@@ -131,6 +139,7 @@ class CommentsOnPost extends Component {
 
 
 	render() {
+		
 		let $commentSection;
 		if (this.state.failedFetch) {
 			$commentSection = 	<Message negative>
@@ -150,7 +159,7 @@ class CommentsOnPost extends Component {
 					<Header as='h3' dividing>
 						Comments
 					</Header>
-					{this.state.isFetching && <Loader/>}
+					<Loader active={this.state.isFetching} inverted/>
 					{!this.state.isFetching && $commentSection}
 				</Comment.Group>
 				<Form>
@@ -167,6 +176,10 @@ class CommentsOnPost extends Component {
 			</span>
 		);
 	}
+}
+
+CommentsOnPost.defaultProps = {
+	comments: [],
 }
 
 CommentsOnPost.propTypes = {
