@@ -120,7 +120,7 @@ class AuthorProfileView(generics.GenericAPIView):
                             if (result.status_code == 200):
                                 print("inside 200")
                                 print(result.json())
-                                friends_list_data += result.json()
+                                friends_list_data.append(result.json())
                         except:
                             print("exception when join back")
                             pass
