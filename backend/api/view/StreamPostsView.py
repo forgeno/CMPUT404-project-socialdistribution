@@ -1,4 +1,5 @@
 import grequests
+import requests
 from django.db import transaction
 from rest_framework import generics
 from rest_framework import authentication, permissions, status
@@ -6,7 +7,6 @@ from ..serializers import AuthorProfileSerializer, PostSerializer
 from rest_framework.response import Response
 from ..models import AuthorProfile, Follow, Post, ServerUser
 from .Util import *
-import requests
 import json
 from urllib.parse import urlparse
 
@@ -65,6 +65,7 @@ class StreamPostsView(generics.GenericAPIView):
                 headers = {'Content-type': 'application/json',
                            "X-Request-User-ID": user_id}
                 url = "{}{}author/posts".format(server_user.host, server_user.prefix)
+                print(url)
                 foreign_requests.append(grequests.get(url,
                                         auth=(server_user.send_username, server_user.send_password),
                                         headers=headers))
@@ -72,6 +73,7 @@ class StreamPostsView(generics.GenericAPIView):
             responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
             print("after map")
             for response in responses:
+                print(response)
                 if not response:
                     continue
                 if response.status_code == 200:
