@@ -191,6 +191,7 @@ CommentsOnPost.defaultProps = {
 
 CommentsOnPost.propTypes = {
 	postID: PropTypes.string.isRequired,
+	comments: PropTypes.array,
 }
 
 export default CommentsOnPost;
