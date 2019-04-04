@@ -1,3 +1,6 @@
+import gevent.monkey
+gevent.monkey.patch_all()
+
 import grequests
 # import requests
 from django.db import transaction
