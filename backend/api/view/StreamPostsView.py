@@ -11,7 +11,6 @@ import json
 from urllib.parse import urlparse
 
 
-
 class StreamPostsView(generics.GenericAPIView):
     serializer_class = AuthorProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -67,8 +66,8 @@ class StreamPostsView(generics.GenericAPIView):
                 url = "{}{}author/posts".format(server_user.host, server_user.prefix)
                 print(url)
                 foreign_requests.append(grequests.get(url,
-                                        auth=(server_user.send_username, server_user.send_password),
-                                        headers=headers))
+                                                      auth=(server_user.send_username, server_user.send_password),
+                                                      headers=headers))
             print("before map")
             responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
             print("after map")
