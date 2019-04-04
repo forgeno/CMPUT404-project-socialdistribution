@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "abort-controller": "^2.0.3",
+    "compression": "^1.7.4",
     "js-cookie": "^2.2.0",
     "mini-css-extract-plugin": "0.4.3",
     "moment": "^2.24.0",
