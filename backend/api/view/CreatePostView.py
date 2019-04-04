@@ -117,6 +117,7 @@ class CreatePostView(generics.GenericAPIView):
                     #     response_json = json.loads(response.content)
                     #     posts_with_comments += response_json["posts"]
 
+                    print("adding to foreign_requests: ", server_obj)
                     foreign_requests.append(session.get(url,
                                                         auth=(server_obj.send_username, server_obj.send_password),
                                                         headers=headers)
