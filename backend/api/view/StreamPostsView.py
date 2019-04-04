@@ -1,5 +1,5 @@
 import grequests
-import requests
+# import requests
 from django.db import transaction
 from rest_framework import generics
 from rest_framework import authentication, permissions, status
@@ -34,6 +34,39 @@ class StreamPostsView(generics.GenericAPIView):
         return self.handle_comments_origin(user_id, stream_posts, friend_list_data)
 
     def get(self, request):
+        servers = ["https://testing-server-404.herokuapp.com/api/author/posts",
+                   "https://weeb-tears.herokuapp.com/author/posts",
+                   "https://cmput404-front.herokuapp.com/api/author/posts"]
+
+        headers = {'Content-type': 'application/json',
+                   "X-Request-User-ID": "https://radiant-savannah-77591.herokuapp.com/author/54af9670-2868-4c21-a909-ff53417f2385"}
+
+        account = [["radiant", "radiant_password"], ["Radiant-Prod-User", "xr7am80h"], ["server1", "server1_password"]]
+
+        foreign_requests = []
+        for i in range(len(servers)):
+            url = servers[i]
+            print(url)
+            foreign_requests.append(grequests.get(url,
+                                                  auth=(account[i][0], account[i][1]),
+                                                  headers=headers,
+                                                  timeout=5)
+                                    )
+
+        print("before map")
+        responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
+        print("after map")
+        for response in responses:
+            print(response)
+            if not response:
+                continue
+            if response.status_code == 200:
+                body = response.json()
+                if isinstance(body, dict):
+                    aa = body.get("posts", [])
+                    print(aa)
+
+    def old_get(self, request):
 
         author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
         server_user_exists = ServerUser.objects.filter(user=request.user).exists()
