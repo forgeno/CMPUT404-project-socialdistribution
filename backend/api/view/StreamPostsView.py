@@ -63,14 +63,16 @@ class StreamPostsView(generics.GenericAPIView):
                 print(url)
                 foreign_requests.append(session.get(url,
                                                     auth=(server_user.send_username, server_user.send_password),
-                                                    headers=headers,
-                                                    timeout=5)
+                                                    headers=headers)
                                         )
             for response in foreign_requests:
-                result = response.result()
-                print(result.status_code)
-                print(result.json())
-                print()
+                try:
+                    result = response.result()
+                    if(result.status_code == 200):
+                        posts += result.json()["posts"]
+                except:
+                    print("exception")
+                    pass
 
         elif server_user_exists:
             user_id = request.META["HTTP_X_REQUEST_USER_ID"]
