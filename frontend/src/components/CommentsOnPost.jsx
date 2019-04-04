@@ -152,14 +152,14 @@ class CommentsOnPost extends Component {
 				$commentSection = <p> No comments yet...</p>;
 			}
 		}
-		
 		return (
 			<span>
 				<Comment.Group>
 					<Header as='h3' dividing>
 						Comments
 					</Header>
-					<Loader active={this.state.isFetching} inverted/>
+					
+					{this.state.isFetching && <Loader active={this.state.isFetching} inverted/>}
 					{!this.state.isFetching && $commentSection}
 				</Comment.Group>
 				<Form>
