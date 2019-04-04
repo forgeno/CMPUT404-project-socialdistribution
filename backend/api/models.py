@@ -116,6 +116,7 @@ class ServerUser(models.Model):
     send_username = models.CharField(max_length=100)
     send_password = models.CharField(max_length=100)
     require_trailing_slash = BooleanField(default=False)
+    disable = BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
