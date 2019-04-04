@@ -8,6 +8,9 @@ export default function profileReducers(state=initialState,action) {
             return Object.assign({}, state, {
                 displayName: action.payload.displayName
               });
+		case "CLEAR_STORE":
+			return Object.assign({}, state, initialState);
+                 
         default:
             return '';
     }
