@@ -11,6 +11,12 @@ import json
 from urllib.parse import urlparse
 
 
+def aaaa(url, account, headers):
+    return grequests.get(url,
+                  auth=(account[i][0], account[i][1]),
+                  headers=headers,
+                  timeout=5)
+
 class StreamPostsView(generics.GenericAPIView):
     serializer_class = AuthorProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -47,11 +53,7 @@ class StreamPostsView(generics.GenericAPIView):
         for i in range(len(servers)):
             url = servers[i]
             print(url)
-            foreign_requests.append(grequests.get(url,
-                                                  auth=(account[i][0], account[i][1]),
-                                                  headers=headers,
-                                                  timeout=5)
-                                    )
+            foreign_requests.append(aaaa(url, account, headers))
 
         print("before map")
         responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
