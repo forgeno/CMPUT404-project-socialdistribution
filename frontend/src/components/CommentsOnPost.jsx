@@ -152,7 +152,7 @@ class CommentsOnPost extends Component {
 				$commentSection = <p> No comments yet...</p>;
 			}
 		}
-	
+		
 		return (
 			<span>
 				<Comment.Group>
