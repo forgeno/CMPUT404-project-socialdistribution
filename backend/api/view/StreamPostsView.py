@@ -37,8 +37,6 @@ class StreamPostsView(generics.GenericAPIView):
             return Response("Invalid request user", status.HTTP_400_BAD_REQUEST)
 
         if author_profile_exists:
-            session = FuturesSession()
-
             user_profile = AuthorProfile.objects.get(user=request.user)
             user_id = get_author_id(user_profile, False)
             friend_list_data = get_local_friends_list(user_id)
@@ -55,6 +53,7 @@ class StreamPostsView(generics.GenericAPIView):
             #         response_json = json.loads(response.content)
             #         posts += response_json["posts"]
 
+            session = FuturesSession()
             foreign_requests = []
             for server_user in ServerUser.objects.all():
                 headers = {'Content-type': 'application/json',

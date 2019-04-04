@@ -1,3 +1,4 @@
+from requests_futures.sessions import FuturesSession
 from rest_framework import generics, permissions, status
 from django.db import transaction
 from rest_framework.response import Response
@@ -102,21 +103,39 @@ class CreatePostView(generics.GenericAPIView):
             posts_with_comments.append(build_post(post))
 
         if(local_author):
+            session = FuturesSession()
+            foreign_requests = []
             for server_obj in ServerUser.objects.all():
                 headers = {'Content-type': 'application/json'}
                 try:
                     url = "{}{}posts".format(server_obj.host, server_obj.prefix)
-                    response = requests.get(url,
-                                            auth=(server_obj.send_username, server_obj.send_password),
-                                            headers=headers)
+                    # response = requests.get(url,
+                    #                         auth=(server_obj.send_username, server_obj.send_password),
+                    #                         headers=headers)
+                    #
+                    # if response.status_code == 200:
+                    #     response_json = json.loads(response.content)
+                    #     posts_with_comments += response_json["posts"]
 
-                    if response.status_code == 200:
-                        response_json = json.loads(response.content)
-                        posts_with_comments += response_json["posts"]
+                    foreign_requests.append(session.get(url,
+                                                        auth=(server_obj.send_username, server_obj.send_password),
+                                                        headers=headers)
+                                            )
 
                 except Exception as e:
+                    print("exception get foreign public posts")
                     pass
                     # return Response("Error: get foreign public posts failed", status.HTTP_400_BAD_REQUEST)
+
+            for response in foreign_requests:
+                try:
+                    result = response.result()
+                    if(result.status_code == 200):
+                        posts_with_comments += result.json()["posts"]
+                except:
+                    print("exception when join back public posts")
+                    pass
+
 
         sorted_public_foreign_posts = sorted(posts_with_comments, key=lambda k: k['published'], reverse=True)
 
