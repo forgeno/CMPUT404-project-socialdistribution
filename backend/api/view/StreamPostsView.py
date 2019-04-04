@@ -1,3 +1,7 @@
+import gevent
+from gevent import monkey
+monkey.patch_all(select=False)
+
 import json
 from urllib.parse import urlparse
 import grequests
