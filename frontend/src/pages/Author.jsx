@@ -411,7 +411,8 @@ class Author extends Component {
 	render() {
 		let $profilePicture = null;
 		let myHost = new URL(Cookies.get("userID") || this.props.storeItems.userID);
-		let postHost = new URL(this.getloggedinAuthorIDandHost()[1]);
+		let postHost = new URL(decodeURIComponent(this.props.match.params.authorId));
+		
 		if (myHost.hostname !== postHost.hostname) {
 			$profilePicture = require('../assets/images/default3.png');
 		}
