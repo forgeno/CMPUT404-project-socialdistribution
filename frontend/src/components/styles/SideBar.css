@@ -8,10 +8,6 @@
 	padding-bottom: 20% !important;
 }
 
-.notificationBubble {
-	font-size: 0.3em !important;
-}
-
 .notificationNumber {
 	float: right;
 	font-size: 1rem;
@@ -45,7 +41,8 @@
 	font-size: 2.0rem;
 	color: white;
 	font-weight: bolder;
-	left: 40%;
-	top: 20%;
+	font-family: Luxi Mono;
+	left: 28px;
+	top: 20px;
 	text-align: center;
 }

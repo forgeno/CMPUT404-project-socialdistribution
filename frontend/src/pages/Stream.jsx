@@ -16,4 +16,4 @@ class Stream extends Component {
     }
 }
 
-export default Stream;
+export default (Stream);

@@ -1,4 +1,6 @@
 import React, { Component} from 'react';
+import {connect} from 'react-redux';
+import * as FriendsActions from "../actions/FriendsActions";
 import { Button, Icon, Feed, Loader, Message} from 'semantic-ui-react';
 import StreamPost from '../components/StreamPost';
 import HTTPFetchUtil from '../util/HTTPFetchUtil.js';
@@ -9,6 +11,7 @@ import { toast } from 'react-semantic-toasts';
 import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import utils from "../util/utils";
 import './styles/StreamFeed.css';
+import store from '../store/index.js';
 import Cookies from 'js-cookie';
 
 const controller = new AbortController();
@@ -68,6 +71,8 @@ class StreamFeed extends Component {
 			unlisted={payload.unlisted}
 			
 			origin={payload.origin}
+		
+			comments={payload.comments}
 			
 			author={payload.author.id}
 			viewingUser={this.props.storeItems.userID}
@@ -86,6 +91,11 @@ class StreamFeed extends Component {
 		}
 		else {
 			this.getPosts();
+		}
+		if (window.location.pathname === "/stream") {
+			const storeItems = store.getState().loginReducers,
+				hostUrl = "/api/author/" + utils.getShortAuthorId(Cookies.get("userID") || storeItems.userId);
+			this.props.getCurrentApprovedFriends(hostUrl, true);
 		}
 	}
 	
@@ -121,6 +131,7 @@ class StreamFeed extends Component {
 															},
 															
 															origin: "https://github.com/",
+															comments: [],
 															
 															deletePost: null,
 															getPosts: null,
@@ -280,7 +291,7 @@ class StreamFeed extends Component {
 		return(	
 		<div>
 			<Feed className="streamFeed">
-				{this.state.isFetching && <Loader/>}
+				<Loader active={this.state.isFetching} size="massive" inverted className="loaderInStreamFeed"/>
 				{this.state.error && <Message className="failedGetPostsMessage" negative>
 										<Message.Header>Failed to get posts</Message.Header>
 									</Message>
@@ -315,4 +326,12 @@ StreamFeed.propTypes = {
 	getGithub: PropTypes.bool,
 }
 
-export default StreamFeed;
+const mapDispatchToProps = dispatch => {
+    return {
+        getCurrentApprovedFriends: (urlPath, requireAuth) => {
+            return dispatch(FriendsActions.getCurrentApprovedFriends(urlPath, requireAuth));
+		},
+    }
+};
+
+export default connect(null, mapDispatchToProps)(StreamFeed);

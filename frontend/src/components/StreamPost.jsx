@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Feed, Modal, Label, Icon, Image, Popup } from 'semantic-ui-react';
+import { Feed, Modal, Label, Icon, Image, Popup, TransitionablePortal } from 'semantic-ui-react';
 import ReactMarkdown from 'react-markdown';
 import ProfileBubble from './ProfileBubble';
 import AnimatedButton from './AnimatedButton';
@@ -227,136 +227,140 @@ class StreamPost extends Component {
 		}
 
 		return(
-			<Feed.Event className={$cursorClass}>
-				<Feed.Label>
-				
-					{this.props.isGithub
-					?
-					<Image bordered circular src={require('../assets/images/gitcat.jpg')}/>
-					:
-					<span className="profileBubbleInPost">
-					<ProfileBubble displayName={this.props.displayName} 
-					userID={this.props.author}
-					profilePicture={this.props.profilePicture} 
-					profileBubbleClassAttributes={"ui circular bordered image"} />
-					</span>
-					}
+				<Feed.Event className={$cursorClass}>
+					<Feed.Label>
 					
-					
-				</Feed.Label>
-				<div className="postContent" onClick={this.openContentModal}>
-				<Feed.Content>
-					<div>
-						<Feed.Summary>
-							<span className="title"> <h3>
-														{!this.props.isGithub && $cornerIcons}
-														
-														<TextTruncate 
-															line={1} 
-															text={this.props.title} 
-															truncateText="..."
-														/>
-													</h3>
-							</span>
-							<div className="byAuthor"> by: {this.props.displayName} </div>
-							
-							<section className="description"> 
-							{this.props.description} 
-							</section>
-						</Feed.Summary> 	
-					
-					{this.state.yourOwnPost &&
-					<Feed.Extra className="managePostButtons">
-					
-						<CreatePostModal 
-							modalTrigger={$modalTrigger}
-							isEdit={true}
-							showModal={this.state.showEditModal}
-							closeModal={this.closeEditModal}
-							storeItems={storeItems} 
-							
-							postID={this.props.postID}
-							title={this.props.title}
-							description={this.props.description}
-							content={this.props.content}
-							contentType={this.props.contentType}
-							categories={this.props.categories}
-							visibility={this.props.visibility}
-							visibleTo={this.props.visibleTo}
-							unlisted={this.props.unlisted}
-							
-							getPosts={this.props.getPosts}
-						/>
-						
-						<div><AnimatedButton iconForButton={"trash icon"} buttonText={"DELETE"} clickFunction={this.openDeleteModal}/></div>
-					</Feed.Extra>
-					}						
-					
-					<Feed.Date className="datetimeOfPost">
-						<Moment format="YYYY-MM-DD HH:mm">
-							{this.props.date}
-						</Moment>
-					</Feed.Date>								
-					</div>
-					
-					{
-						!this.props.isGithub
-							&&
-						<Modal 
-						open={this.state.showContentModal}
-						onClose={this.closeContentModal}
-						className={"contentPostModal"}
-						>
-						<Modal.Header className='modalHeader'> 
-						
-						<span className="profileBubbleInShowContent">
-							<ProfileBubble 
-							displayName={this.props.displayName} 
-							userID={this.props.author}
-							profilePicture={this.props.profilePicture} 
-							profileBubbleClassAttributes={"ui circular bordered mini image"} />
+						{this.props.isGithub
+						?
+						<Image bordered circular src={require('../assets/images/gitcat.jpg')}/>
+						:
+						<span className="profileBubbleInPost">
+						<ProfileBubble displayName={this.props.displayName} 
+						userID={this.props.author}
+						profilePicture={this.props.profilePicture} 
+						profileBubbleClassAttributes={"ui circular bordered image"} />
 						</span>
-						<span className="titleInShowContent">{this.props.title}</span>
-						<div className="byAuthorInShowContent"> by: {this.props.displayName} </div> 
-						<div className="descriptionInShowContent"> {this.props.description} </div>
+						}
 						
-						</Modal.Header>
-						<Modal.Content>
+						
+					</Feed.Label>
+					<div className="postContent" onClick={this.openContentModal}>
+					<Feed.Content>
+						<div>
+							<Feed.Summary>
+								<span className="title"> <h3>
+															{!this.props.isGithub && $cornerIcons}
+															
+															<TextTruncate 
+																line={1} 
+																text={this.props.title} 
+																truncateText="..."
+															/>
+														</h3>
+								</span>
+								<div className="byAuthor"> by: {this.props.displayName} </div>
+								
+								<section className="description"> 
+								{this.props.description} 
+								</section>
+							</Feed.Summary> 	
+						
+						{this.state.yourOwnPost &&
+						<Feed.Extra className="managePostButtons">
+						
+							<CreatePostModal 
+								modalTrigger={$modalTrigger}
+								isEdit={true}
+								showModal={this.state.showEditModal}
+								closeModal={this.closeEditModal}
+								storeItems={storeItems} 
+								
+								postID={this.props.postID}
+								title={this.props.title}
+								description={this.props.description}
+								content={this.props.content}
+								contentType={this.props.contentType}
+								categories={this.props.categories}
+								visibility={this.props.visibility}
+								visibleTo={this.props.visibleTo}
+								unlisted={this.props.unlisted}
+								
+								getPosts={this.props.getPosts}
+							/>
+							
+							<div><AnimatedButton iconForButton={"trash icon"} buttonText={"DELETE"} clickFunction={this.openDeleteModal}/></div>
+						</Feed.Extra>
+						}						
+						
+						<Feed.Date className="datetimeOfPost">
+							<Moment format="YYYY-MM-DD HH:mm">
+								{this.props.date}
+							</Moment>
+						</Feed.Date>								
+						</div>
+						
+						{
+							!this.props.isGithub
+								&&
+							<TransitionablePortal 
+								open={this.state.showContentModal}  
+								transition={{ animation:'fade', duration: 500 }}
+								closeOnDocumentClick={false}
+							>
+								<Modal 
+								open={this.state.showContentModal}
+								onClose={this.closeContentModal}
+								className={"contentPostModal"}
+								>
+									<Modal.Header className='modalHeader'> 
+									
+									<span className="profileBubbleInShowContent">
+										<ProfileBubble 
+										displayName={this.props.displayName} 
+										userID={this.props.author}
+										profilePicture={this.props.profilePicture} 
+										profileBubbleClassAttributes={"ui circular bordered mini image"} />
+									</span>
+									<span className="titleInShowContent">{this.props.title}</span>
+									<div className="byAuthorInShowContent"> by: {this.props.displayName} </div> 
+									<div className="descriptionInShowContent"> {this.props.description} </div>
+									
+									</Modal.Header>
+									<Modal.Content>
+										<section  className='contentModalContent'>
+											{this.contentRender(this.props.content, this.props.contentType)}
+										</section>		
 
-					<section  className='contentModalContent'>
-						{this.contentRender(this.props.content, this.props.contentType)}
-					</section>		
+										<CommentsOnPost comments={this.props.comments} postID={postId} origin={this.props.origin} author={this.props.author} />
 
-					<CommentsOnPost postID={postId} origin={this.props.origin} />
-					
-					<span className="postID"> {this.props.postID} </span>
-
-							{this.categoryLabels()}
-				
+										{this.categoryLabels()}
+							
+									</Modal.Content>
+								</Modal>
+						</TransitionablePortal>
+						}
+						<TransitionablePortal open={this.state.showDeleteModal}  transition={{ animation:'fade', duration: 500 }}>
+						<Modal
+						open={this.state.showDeleteModal}
+						onClose={this.closeDeleteModal}
+						>
+						<Modal.Header className="deleteModalHeader"> <Icon name='warning sign'/>DELETE THIS POST? </Modal.Header>
+						
+						<Modal.Content className='contentModalContent'>	
+							<section>
+								{this.contentRender(this.props.content, this.props.contentType)}
+							</section>
 						</Modal.Content>
-					</Modal>
-					}
-					
-					<Modal
-					open={this.state.showDeleteModal}
-					onClose={this.closeDeleteModal}
-					>
-					<Modal.Header className="deleteModalHeader"> <Icon name='warning sign'/>DELETE THIS POST? </Modal.Header>
-					
-					<Modal.Content className='contentModalContent'>	
-						<section>
-							{this.contentRender(this.props.content, this.props.contentType)}
-						</section>
-					</Modal.Content>
-					<Modal.Actions className="deletePostModalButtons">
-						<AnimatedButton iconForButton={"cancel icon"} buttonText={"CANCEL"} clickFunction={this.closeDeleteModal}/>
-						<AnimatedButton iconForButton={"trash icon"} buttonText={"DELETE"} clickFunction={this.deletePost} extraAttributes={"negative"}/>
-					</Modal.Actions>
-					</Modal>
-					
-				</Feed.Content>
-				</div>
-			</Feed.Event>
+						<Modal.Actions className="deletePostModalButtons">
+							<AnimatedButton iconForButton={"cancel icon"} buttonText={"CANCEL"} clickFunction={this.closeDeleteModal}/>
+							<AnimatedButton iconForButton={"trash icon"} buttonText={"DELETE"} clickFunction={this.deletePost} extraAttributes={"negative"}/>
+						</Modal.Actions>
+						</Modal>
+				      </TransitionablePortal>
+						
+					</Feed.Content>
+					</div>
+				</Feed.Event>
 		)
 	}
 }

@@ -42,6 +42,7 @@ class Friends extends Component {
 			return null
 		}
 
+		this.props.startFetching();
 		this.setState({
 			userIdFullURL: fullAuthorId,
 			hostName: utils.getHostName(fullAuthorId),
@@ -223,15 +224,22 @@ class Friends extends Component {
 	}
 
 	render() {
+	
+	let $numFriendRequests = "";
+
+	if (store.getState().friendsReducers.requests.length !== 0) {
+		$numFriendRequests = "(" + store.getState().friendsReducers.requests.length + ")";
+	}
+	
 	return(	
 		<div className="pusher">
 			<div id="FriendDiv">
 				<Button.Group id="ToggleFriendList">
 					<Button id="friends" onClick={() =>{this.setState({mode: "friends",friendButtonColor: "teal", requestButtonColor: "grey"})}} color={this.state.friendButtonColor}>Current Friends</Button>
 					<Button.Or/>
-					<Button id="requests" onClick={() =>{this.setState({mode: "requests",friendButtonColor: "grey", requestButtonColor: "teal"})}} color ={this.state.requestButtonColor}>Friend Requests</Button>
+					<Button id="requests" onClick={() =>{this.setState({mode: "requests",friendButtonColor: "grey", requestButtonColor: "teal"})}} color ={this.state.requestButtonColor}>Friend Requests {$numFriendRequests}</Button>
 				</Button.Group>
-				<FriendListComponent data={this.getListView()} mode={this.state.mode} acceptRequest={this.approveFriendRequest} rejectRequest={this.removeFriend} viewOwnFriendlist={true}/>
+				<FriendListComponent data={this.getListView()} mode={this.state.mode} acceptRequest={this.approveFriendRequest} rejectRequest={this.removeFriend} viewOwnFriendlist={true} />
 				<SemanticToastContainer position="bottom-left"/>
 			</div>
 		</div>
@@ -245,7 +253,10 @@ const mapDispatchToProps = dispatch => {
 		},
 		getCurrentFriendsRequests: (urlPath, requireAuth) => {
             return dispatch(FriendsActions.getCurrentFriendsRequests(urlPath, requireAuth));
-        }
+        },
+        startFetching: () => {
+        	return dispatch(FriendsActions.startFetching());
+        },
     }
 };
 

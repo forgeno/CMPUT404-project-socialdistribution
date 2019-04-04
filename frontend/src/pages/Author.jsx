@@ -409,12 +409,19 @@ class Author extends Component {
               ];
 
 	render() {
+		let $profilePicture = null;
+		let myHost = new URL(Cookies.get("userID") || this.props.storeItems.userID);
+		let postHost = new URL(this.getloggedinAuthorIDandHost()[1]);
+		if (myHost.hostname !== postHost.hostname) {
+			$profilePicture = require('../assets/images/default3.png');
+		}
         return(
             <div className="pusher AuthorPage">
                 <div className="profile">
                     <ProfileBubble
                         displayName={this.state.displayName}
                         userID={decodeURIComponent(this.props.match.params.authorId)}
+                        profilePicture={$profilePicture}
                         profileBubbleClassAttributes={"ui centered top aligned circular bordered small image"}
                     />
                     <br/>
