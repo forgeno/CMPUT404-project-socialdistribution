@@ -1,7 +1,8 @@
 const initialState = {
     friends: [],
     requests: [],
-    isFetching: true,
+    numFriendRequests: 0,
+    isFetching: false,
 };
 
 export default function friendsReducer(state=initialState, action) {
@@ -16,6 +17,12 @@ export default function friendsReducer(state=initialState, action) {
                 requests: action.payload,
                 isFetching: false,
             });
+        case "NUM_REQUESTS":
+            return Object.assign({}, state, {
+                numFriendRequests: action.payload,
+                isFetching: false,
+            });
+        
         case "START_FETCHING":
         	return Object.assign({}, state, {
                 isFetching: true,

@@ -21,8 +21,13 @@ class CommentsOnPost extends Component {
 		};
 		this.createCommentList = this.createCommentList.bind(this);
 		this.getComments = this.getComments.bind(this);
+		this.updateComments = this.updateComments.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.submitComment = this.submitComment.bind(this);
+	}
+
+	updateComments(newComments) {
+		this.props.updateComments(newComments);
 	}
 
 	getComments() {
@@ -44,6 +49,7 @@ class CommentsOnPost extends Component {
 							comments: commentList,
 							isFetching: false,
 						});
+						this.updateComments(this.state.comments);
 					})
 				}
 				else {
@@ -158,8 +164,9 @@ class CommentsOnPost extends Component {
 					<Header as='h3' dividing>
 						Comments
 					</Header>
-					
-					{this.state.isFetching && <Loader active={this.state.isFetching} inverted/>}
+					{this.state.isFetching && 
+					<Loader active={this.state.isFetching} inverted className="loaderComments"/>
+					}
 					{!this.state.isFetching && $commentSection}
 				</Comment.Group>
 				<Form>
@@ -184,6 +191,7 @@ CommentsOnPost.defaultProps = {
 
 CommentsOnPost.propTypes = {
 	postID: PropTypes.string.isRequired,
+	comments: PropTypes.array,
 }
 
 export default CommentsOnPost;

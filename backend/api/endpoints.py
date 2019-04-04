@@ -10,6 +10,7 @@ from .view.CheckFollowersView import CheckFollowersView
 from .view.GetPostsView import GetPostsView
 from .view.StreamPostsView import StreamPostsView
 from .view.PostCommentsView import PostCommentsView
+from .view.FriendRequestCountView import FriendRequestCountView
 from django.urls import path
 
 urlpatterns = [
@@ -26,4 +27,5 @@ urlpatterns = [
     url('^friendrequest/?$', FriendsView.as_view()),
     url('^unfollow/?$', FriendsView.as_view()),
     url(r'^followers/(?P<authorid>.*)$', CheckFollowersView.as_view()),
+    url(r'^count_friendrequest/?$', FriendRequestCountView.as_view()),
 ]
