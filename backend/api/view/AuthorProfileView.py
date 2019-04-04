@@ -58,7 +58,7 @@ class AuthorProfileView(generics.GenericAPIView):
             return Response("Error: Author ID required!", status.HTTP_400_BAD_REQUEST)
 
         author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
-        server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+        server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
 
         # from front end
         if author_profile_exists:
@@ -83,9 +83,9 @@ class AuthorProfileView(generics.GenericAPIView):
                         friend_host = tmp[0]
                         friend_short_id = tmp[1]
 
-                        if (ServerUser.objects.filter(host=friend_host).exists()):
+                        if (ServerUser.objects.filter(host=friend_host, disable=False).exists()):
                             try:
-                                server_user = ServerUser.objects.get(host=friend_host)
+                                server_user = ServerUser.objects.get(host=friend_host, disable=False)
                                 url = "{}{}author/{}".format(server_user.host, server_user.prefix, friend_short_id)
                                 headers = {'Content-type': 'application/json'}
 
@@ -112,7 +112,7 @@ class AuthorProfileView(generics.GenericAPIView):
             else:
                 try:
                     parsed_url = urlparse(authorId)
-                    foreign_server = ServerUser.objects.get(host="{}://{}/".format(parsed_url.scheme, parsed_url.netloc))
+                    foreign_server = ServerUser.objects.get(host="{}://{}/".format(parsed_url.scheme, parsed_url.netloc), disable=False)
                     author_short_id = parsed_url.path.split("/")[-1]
                     url = "{}{}author/{}".format(foreign_server.host, foreign_server.prefix, author_short_id)
                     headers = {'Content-type': 'application/json'}

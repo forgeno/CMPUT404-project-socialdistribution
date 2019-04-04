@@ -91,7 +91,7 @@ def get_foreign_friend_list(author_id):
     try:
         parsed_url = urlparse(author_id)
         author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
-        server_user = ServerUser.objects.get(host=author_host)
+        server_user = ServerUser.objects.get(host=author_host, disable=False)
         author_short_id = author_id.split("author/")[-1]
         url = "{}{}author/{}/friends".format(server_user.host, server_user.prefix, author_short_id)
         headers = {'Content-type': 'application/json'}
@@ -141,10 +141,10 @@ def build_post(post):
                     comments.append(comment)
             else:
                 # do foreigner stuff
-                if(ServerUser.objects.filter(host=commenter_host).exists()):
+                if(ServerUser.objects.filter(host=commenter_host, disable=False).exists()):
                     try:
                         foreign_author_id = get_author_profile_uuid(comment["author"])
-                        server_obj = ServerUser.objects.get(host=commenter_host)
+                        server_obj = ServerUser.objects.get(host=commenter_host, disable=False)
                         url = "{}{}author/{}".format(server_obj.host, server_obj.prefix, foreign_author_id)
                         headers = {'Content-type': 'application/json'}
                         response = requests.get(url,

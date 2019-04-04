@@ -53,7 +53,7 @@ def valid_local_author(author_host, author_id):
 def follow(request):
     #print(request.data["friend"]["host"])
     author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
-    server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+    server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
     parsed_url = urlparse(request.data["author"]["id"])
     author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
     parsed_url = urlparse(request.data["friend"]["id"])
@@ -73,7 +73,7 @@ def follow(request):
 
         if author_host != friend_host:
             try:
-                server_user = ServerUser.objects.get(host=friend_host)
+                server_user = ServerUser.objects.get(host=friend_host, disable=False)
                 payload = json.dumps(request.data)
                 headers = {'Content-type': 'application/json'}
                 url = "{}{}friendrequest".format(server_user.host, server_user.prefix)
@@ -150,7 +150,7 @@ def valid_foreign_author(author_host, author_id):
     try:
         tmp = author_id.split("author/")
         author_short_id = tmp[1]
-        server_user = ServerUser.objects.get(host=author_host)
+        server_user = ServerUser.objects.get(host=author_host, disable=False)
         headers = {'Content-type': 'application/json'}
         url = "{}{}author/{}".format(server_user.host, server_user.prefix, author_short_id)
         response = requests.get(url, 
@@ -169,7 +169,7 @@ def valid_foreign_author(author_host, author_id):
 # function to unfollow
 def unfollow(request):
     author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
-    server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+    server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
     parsed_url = urlparse(request.data["author"]["id"])
     author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
     author_id = request.data["author"]["id"]
@@ -189,7 +189,7 @@ def unfollow(request):
                 return Response("Foreign author does not exist", status.HTTP_400_BAD_REQUEST)
 
             try:
-                server_user = ServerUser.objects.get(host=friend_host)
+                server_user = ServerUser.objects.get(host=friend_host, disable=False)
                 headers = {'Content-type': 'application/json'}
                 url = "{}{}unfollow".format(server_user.host, server_user.prefix)
                 response = requests.post(url, 

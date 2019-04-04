@@ -46,7 +46,7 @@ class GetPostsView(generics.GenericAPIView):
             return Response("Error: no author id was specified", status_code)
 
         author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
-        server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+        server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
 
         # from front end
         if author_profile_exists:
@@ -70,7 +70,7 @@ class GetPostsView(generics.GenericAPIView):
             else:
                 try:
                     parsed_url = urlparse(author_id)
-                    foreign_server = ServerUser.objects.get(host="{}://{}/".format(parsed_url.scheme, parsed_url.netloc))
+                    foreign_server = ServerUser.objects.get(host="{}://{}/".format(parsed_url.scheme, parsed_url.netloc), disable=False)
                     short_foreign_author_id = author_id.split("author/")[-1]
                     url = "{}{}author/{}/posts".format(foreign_server.host, foreign_server.prefix, short_foreign_author_id)
                     user_profile = AuthorProfile.objects.get(user=request.user)

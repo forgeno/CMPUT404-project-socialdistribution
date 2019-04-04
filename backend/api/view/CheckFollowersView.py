@@ -36,7 +36,7 @@ class CheckFollowersView(generics.GenericAPIView):
             else:
                 try:
                     print("this is foreign author")
-                    server_user = ServerUser.objects.get(host=follower_host)
+                    server_user = ServerUser.objects.get(host=follower_host, disable=False)
                     print(server_user)
                     url = "{}{}author/{}".format(server_user.host, server_user.prefix, follower_author_profile_id)
                     print(url)
