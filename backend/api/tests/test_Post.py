@@ -747,3 +747,25 @@ class PostTestCase(TestCase):
         expected_author_list = [self.authorProfile1] * expected_output["count"]
         assert_post_response(response, expected_output, expected_author_list)
         self.client.logout()
+
+    def test_get_single_public_unlisted_post(self):
+        Post.objects.all().delete()
+
+        unlisted_input = self.public_post_1.copy()
+        unlisted_input["unlisted"] = True
+
+        test_post_obj = create_mock_post(unlisted_input, self.authorProfile2)
+
+        self.client.login(username=self.username1, password=self.password1)
+
+        response = self.client.get("/api/posts/{}".format(test_post_obj.id))
+
+        expected_output = {
+            "query": "posts",
+            "count": 1,
+            "posts": [unlisted_input]
+        }
+
+        expected_author_list = [self.authorProfile2] * expected_output["count"]
+        assert_post_response(response, expected_output, expected_author_list)
+        self.client.logout()
