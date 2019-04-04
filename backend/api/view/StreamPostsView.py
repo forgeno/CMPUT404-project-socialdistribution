@@ -71,7 +71,7 @@ class StreamPostsView(generics.GenericAPIView):
                     if(result.status_code == 200):
                         posts += result.json()["posts"]
                 except:
-                    print("exception")
+                    print("exception when join back author posts")
                     pass
 
         elif server_user_exists:

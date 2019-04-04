@@ -122,7 +122,7 @@ class AuthorProfileView(generics.GenericAPIView):
                                 print(result.json())
                                 friends_list_data.append(result.json())
                         except:
-                            print("exception when join back")
+                            print("exception when join back author profile")
                             pass
 
                     response_data["friends"] = friends_list_data
