@@ -67,7 +67,6 @@ class CheckFollowersTestCase(TestCase):
                               authorB=self.user_id,
                               status="FOLLOWING")
 
-
     def test_get_author_followers_list_with_no_followers(self):
         self.client.login(username=self.username4, password=self.password4)
 
