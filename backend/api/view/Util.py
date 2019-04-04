@@ -178,7 +178,7 @@ def build_post(post):
                 result = response.result()
                 if (result.status_code == 200):
                     index = comments_with_foreign_author_index[i]
-                    comments[index] = result
+                    comments[index] = result.json()
             except:
                 print("exception when join back public posts")
                 pass
