@@ -123,10 +123,10 @@ USE_TZ = True
 # make sure it has a slash at the end
 
 #This URL is meant for developer environment
-# BACKEND_URL = "http://127.0.0.1:8000/"
+BACKEND_URL = "http://127.0.0.1:8000/"
 #
 #This URL is meant for production
-BACKEND_URL = "https://radiant-savannah-77591.herokuapp.com/"
+# BACKEND_URL = "https://radiant-savannah-77591.herokuapp.com/"
 ########################################################
 
 # Static files (CSS, JavaScript, Images)
