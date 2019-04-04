@@ -1,3 +1,4 @@
+import grequests
 from django.db import transaction
 from rest_framework import generics
 from rest_framework import authentication, permissions, status
@@ -8,7 +9,7 @@ from .Util import *
 import requests
 import json
 from urllib.parse import urlparse
-import grequests
+
 
 
 class StreamPostsView(generics.GenericAPIView):
@@ -16,6 +17,7 @@ class StreamPostsView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def _exception_handler(self, request, exception):
+        print("inside exception")
         print(exception)
         pass
 
