@@ -98,7 +98,7 @@ class AuthorProfileView(generics.GenericAPIView):
                                 #                         headers=headers)
                                 # if response.status_code == 200:
                                 #     friends_list_data.append(json.loads(response.content))
-
+                                print(url)
                                 foreign_requests.append(session.get(url,
                                                                     auth=(server_user.send_username,
                                                                           server_user.send_password),
@@ -107,6 +107,7 @@ class AuthorProfileView(generics.GenericAPIView):
 
                             except Exception as e:
                                 # ignore and just not add into friend list if cant get from server
+                                print("inside for loop exception")
                                 pass
                         else:
                             friend_profile = AuthorProfile.objects.get(id=friend_short_id)
@@ -117,9 +118,11 @@ class AuthorProfileView(generics.GenericAPIView):
                         try:
                             result = response.result()
                             if (result.status_code == 200):
+                                print("inside 200")
+                                print(result.json())
                                 friends_list_data += result.json()
                         except:
-                            print("exception")
+                            print("exception when join back")
                             pass
 
                     response_data["friends"] = friends_list_data
