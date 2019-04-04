@@ -11,13 +11,13 @@ from urllib.parse import urlparse
 import grequests
 
 
-def _exception_handler(self, request, exception):
-    print(exception)
-    pass
-
 class StreamPostsView(generics.GenericAPIView):
     serializer_class = AuthorProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    def _exception_handler(self, request, exception):
+        print(exception)
+        pass
 
     def handle_comments_origin(self, user_id, posts, friend_list):
         stream = []
