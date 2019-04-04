@@ -198,6 +198,7 @@ class StreamPost extends Component {
 
 		let $cornerIcons = (
 			<span>
+			
 			<Popup
 			trigger={
 			<CopyToClipboard text={this.getPostFrontEndUrl()}>
@@ -220,6 +221,14 @@ class StreamPost extends Component {
 			content={this.props.visibility}
 			hideOnScroll
 			/>
+			
+			{this.props.unlisted && 
+				<Popup
+					trigger={<Icon name={"detective"} aria-label={"unlisted"} className="unlistedIcon"/>}
+					content={"Unlisted"}
+					hideOnScroll
+				/>
+			}
 			</span>
 		);
 
