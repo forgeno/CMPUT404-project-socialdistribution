@@ -8,7 +8,12 @@ from .Util import *
 import requests
 import json
 from urllib.parse import urlparse
+import grequests
 
+
+def _exception_handler(self, request, exception):
+    print(exception)
+    pass
 
 class StreamPostsView(generics.GenericAPIView):
     serializer_class = AuthorProfileSerializer
@@ -42,16 +47,34 @@ class StreamPostsView(generics.GenericAPIView):
             friend_list_data = get_local_friends_list(user_id)
             posts = self.get_local_posts(user_id, friend_list_data)
 
+            # for server_user in ServerUser.objects.all():
+            #     headers = {'Content-type': 'application/json',
+            #                "X-Request-User-ID": user_id}
+            #     url = "{}{}author/posts".format(server_user.host, server_user.prefix)
+            #     response = requests.get(url,
+            #                             auth=(server_user.send_username, server_user.send_password),
+            #                             headers=headers)
+            #     if response.status_code == 200:
+            #         response_json = json.loads(response.content)
+            #         posts += response_json["posts"]
+
+            foreign_requests = []
             for server_user in ServerUser.objects.all():
                 headers = {'Content-type': 'application/json',
                            "X-Request-User-ID": user_id}
                 url = "{}{}author/posts".format(server_user.host, server_user.prefix)
-                response = requests.get(url,
+                foreign_requests.append(grequests.get(url,
                                         auth=(server_user.send_username, server_user.send_password),
-                                        headers=headers)
+                                        headers=headers))
+
+            responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
+            for response in responses:
+                if not response:
+                    continue
                 if response.status_code == 200:
-                    response_json = json.loads(response.content)
-                    posts += response_json["posts"]
+                    body = response.json()
+                    if isinstance(body, dict):
+                        posts += body.get("posts", [])
 
         elif server_user_exists:
             user_id = request.META["HTTP_X_REQUEST_USER_ID"]
