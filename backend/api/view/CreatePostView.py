@@ -195,7 +195,7 @@ class CreatePostView(generics.GenericAPIView):
             post = Post.objects.get(id=post_id)
             serialized_post = PostSerializer(post).data
 
-            if(not can_read(str(authorId), serialized_post, friend_list_data)):
+            if(not can_read(str(authorId), serialized_post, friend_list_data, True)):
 
                 return Response("Error: You do not have permission to view this post", status.HTTP_400_BAD_REQUEST)
             serialized_post_with_comments = build_post(serialized_post)

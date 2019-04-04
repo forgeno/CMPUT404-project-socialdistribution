@@ -18,12 +18,12 @@ def get_author_id(author_profile, escaped):
 
 # the post argument should be a serialized post object
 # the friends_list argument should be a list of author id
-def can_read(requesting_author_id, post, friends_list):
+def can_read(requesting_author_id, post, friends_list, ignore_unlisted=False):
     try:
         parsed_url = urlparse(requesting_author_id)
         requesting_author_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
 
-        if (post["unlisted"]):
+        if (not ignore_unlisted and post["unlisted"]):
             return False
 
         elif (requesting_author_id == post["author"]["id"] or post["visibility"] == "PUBLIC"):
