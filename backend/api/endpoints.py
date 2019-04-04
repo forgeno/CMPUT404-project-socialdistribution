@@ -27,5 +27,5 @@ urlpatterns = [
     url('^friendrequest/?$', FriendsView.as_view()),
     url('^unfollow/?$', FriendsView.as_view()),
     url(r'^followers/(?P<authorid>.*)$', CheckFollowersView.as_view()),
-    url(r'^count_friendrequest$', FriendRequestCountView.as_view()),
+    url(r'^count_friendrequest/?$', FriendRequestCountView.as_view()),
 ]
