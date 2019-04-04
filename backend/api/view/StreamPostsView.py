@@ -66,8 +66,9 @@ class StreamPostsView(generics.GenericAPIView):
                 foreign_requests.append(grequests.get(url,
                                         auth=(server_user.send_username, server_user.send_password),
                                         headers=headers))
-
+            print("before map")
             responses = grequests.map(foreign_requests, exception_handler=self._exception_handler)
+            print("after map")
             for response in responses:
                 if not response:
                     continue
