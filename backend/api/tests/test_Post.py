@@ -767,6 +767,5 @@ class PostTestCase(TestCase):
         }
 
         expected_author_list = [self.authorProfile2] * expected_output["count"]
-        print(response.json())
         assert_post_response(response, expected_output, expected_author_list)
         self.client.logout()
