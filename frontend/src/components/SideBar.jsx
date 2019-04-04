@@ -46,9 +46,12 @@ class SideBar extends Component {
 	
 	checkForFriendRequest() {
 		if (window.location.pathname !== "/") {
-			const urlPath = "/api/count_friendrequest/",
-			requireAuth = true;	
-			this.props.getNumFriendsRequests(urlPath,requireAuth);
+			if (this.props.isFetching === false) {
+				this.props.startFetching();
+				const urlPath = "/api/count_friendrequest/",
+				requireAuth = true;	
+				this.props.getNumFriendsRequests(urlPath,requireAuth);
+			}
 		}
 	}
 
@@ -105,6 +108,7 @@ const mapStateToProps = state => {
 	return {
 		displayName: state.profileReducers.displayName, 
 		numFriendRequests: state.friendsReducers.numFriendRequests,
+		isFetching: state.friendsReducers.isFetching,
 	}
 }
 
@@ -112,6 +116,9 @@ const mapDispatchToProps = dispatch => {
     return {
 		getNumFriendsRequests: (urlPath, requireAuth) => {
             return dispatch(FriendsActions.getNumFriendsRequests(urlPath, requireAuth));
+        },
+        startFetching: () => {
+        	return dispatch(FriendsActions.startFetching());
         },
     }
 };

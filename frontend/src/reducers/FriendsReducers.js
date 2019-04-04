@@ -2,7 +2,7 @@ const initialState = {
     friends: [],
     requests: [],
     numFriendRequests: 0,
-    isFetching: true,
+    isFetching: false,
 };
 
 export default function friendsReducer(state=initialState, action) {
