@@ -27,6 +27,10 @@ export default function friendsReducer(state=initialState, action) {
         	return Object.assign({}, state, {
                 isFetching: true,
             });
+            
+        case "CLEAR_STORE":
+        	return Object.assign({}, state, initialState);
+                 
         default:
             return state;
     }

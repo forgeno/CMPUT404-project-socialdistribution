@@ -17,3 +17,12 @@ export const editProfile = (results) => {
 					});
 	}
 }
+
+export const clearStore = () => {
+    return (dispatch) => {
+                        return dispatch({
+                            type: "CLEAR_STORE",
+                            payload: ''
+                        })
+           }
+}
