@@ -44,6 +44,28 @@ export const getCurrentFriendsRequests = (urlPath, requireAuth, signal) => {
     }
 }
 
+export const getNumFriendsRequests = (urlPath, requireAuth, signal) => {
+    return (dispatch) => {
+        HTTPFetchUtil.getRequest(urlPath, requireAuth, signal)
+            .then((httpResponse) => {
+                if (httpResponse.status === 200) {
+                    httpResponse.json().then((results) => {
+                        return dispatch({
+                            type: "NUM_REQUESTS",
+                            payload: results.count,
+                        })
+                    })
+                }
+                else{
+                    return httpResponse;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+        });
+    }
+}
+
 export const startFetching = () => {
     return (dispatch) => {
                         return dispatch({

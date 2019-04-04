@@ -4,10 +4,10 @@ import 'semantic-ui-css/semantic.min.css';
 import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 import {Link} from "react-router-dom";
 import './styles/SideBar.css';
-import store from "../store/index";
 import * as FriendsActions from "../actions/FriendsActions";
 import AbortController from 'abort-controller';
 import Cookies from 'js-cookie';
+import store from '../store/index.js';
 
 
 const controller = new AbortController();
@@ -46,10 +46,9 @@ class SideBar extends Component {
 	
 	checkForFriendRequest() {
 		if (window.location.pathname !== "/") {
-			const fullAuthorId = store.getState().loginReducers.userId || Cookies.get("userID"),
-			urlPath = "/api/followers/" + encodeURIComponent(fullAuthorId),
+			const urlPath = "/api/count_friendrequest/",
 			requireAuth = true;	
-			this.props.getCurrentFriendsRequests(urlPath,requireAuth);
+			this.props.getNumFriendsRequests(urlPath,requireAuth);
 		}
 	}
 
@@ -105,14 +104,14 @@ class SideBar extends Component {
 const mapStateToProps = state => {
 	return {
 		displayName: state.profileReducers.displayName, 
-		numFriendRequests: state.friendsReducers.requests.length,
+		numFriendRequests: state.friendsReducers.numFriendRequests,
 	}
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-		getCurrentFriendsRequests: (urlPath, requireAuth) => {
-            return dispatch(FriendsActions.getCurrentFriendsRequests(urlPath, requireAuth));
+		getNumFriendsRequests: (urlPath, requireAuth) => {
+            return dispatch(FriendsActions.getNumFriendsRequests(urlPath, requireAuth));
         },
     }
 };
