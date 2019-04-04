@@ -22,6 +22,7 @@ class StreamPost extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			comments: this.props.comments,
 			showContentModal: false,
 			showDeleteModal: false,
 			showEditModal: false,
@@ -41,6 +42,8 @@ class StreamPost extends Component {
 		this.contentRender = this.contentRender.bind(this);
 		this.deletePost = this.deletePost.bind(this);
 		
+		this.updateComments = this.updateComments.bind(this);
+		
 		this.copyPostToClipboard = this.copyPostToClipboard.bind(this);
 		this.categoryLabels = this.categoryLabels.bind(this);
 		this.getPostFrontEndUrl = this.getPostFrontEndUrl.bind(this);
@@ -52,6 +55,12 @@ class StreamPost extends Component {
 				yourOwnPost: true,
 			});
 		}
+	}
+
+	updateComments(newComments) {
+		this.setState({
+			comments: newComments,
+		});
 	}
 
 	openContentModal(event) {
@@ -331,7 +340,7 @@ class StreamPost extends Component {
 											{this.contentRender(this.props.content, this.props.contentType)}
 										</section>		
 
-										<CommentsOnPost comments={this.props.comments} postID={postId} origin={this.props.origin} author={this.props.author} />
+										<CommentsOnPost comments={this.state.comments} postID={postId} updateComments={this.updateComments} origin={this.props.origin} author={this.props.author} />
 
 										{this.categoryLabels()}
 							
@@ -383,6 +392,8 @@ StreamPost.propTypes = {
 	
 	isGithub: PropTypes.bool,
 	origin: PropTypes.string.isRequired,
+	
+	comments: PropTypes.array,
 	
 	author: PropTypes.string.isRequired,
 	viewingUser: PropTypes.string,
