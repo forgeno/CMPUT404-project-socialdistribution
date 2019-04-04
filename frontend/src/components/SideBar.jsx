@@ -46,7 +46,7 @@ class SideBar extends Component {
 	
 	checkForFriendRequest() {
 		if (window.location.pathname !== "/") {
-			if (!this.props.isFetching) {
+			if (this.props.isFetching === false) {
 				this.props.startFetching();
 				const urlPath = "/api/count_friendrequest/",
 				requireAuth = true;	
