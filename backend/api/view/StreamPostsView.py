@@ -1,17 +1,16 @@
-import gevent.monkey
-gevent.monkey.patch_all()
-
+import json
+from urllib.parse import urlparse
 import grequests
-# import requests
-from django.db import transaction
+import requests
+
 from rest_framework import generics
 from rest_framework import authentication, permissions, status
 from ..serializers import AuthorProfileSerializer, PostSerializer
 from rest_framework.response import Response
 from ..models import AuthorProfile, Follow, Post, ServerUser
 from .Util import *
-import json
-from urllib.parse import urlparse
+
+
 
 
 def aaaa(url, account, headers, i):
