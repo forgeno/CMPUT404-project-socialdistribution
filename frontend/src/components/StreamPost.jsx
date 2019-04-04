@@ -393,6 +393,8 @@ StreamPost.propTypes = {
 	isGithub: PropTypes.bool,
 	origin: PropTypes.string.isRequired,
 	
+	comments: PropTypes.array,
+	
 	author: PropTypes.string.isRequired,
 	viewingUser: PropTypes.string,
 	
