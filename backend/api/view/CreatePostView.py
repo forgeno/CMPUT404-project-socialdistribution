@@ -78,6 +78,10 @@ class CreatePostView(generics.GenericAPIView):
         except ValueError as error:
             return Response(str(error), status.HTTP_400_BAD_REQUEST)
 
+        if (len(request.data["content"]) >= 1280*720):
+            return Response("Error: content length must be less than 1280 * 720", status.HTTP_400_BAD_REQUEST)
+
+
         post_id = uuid.uuid4()
         source_origin_value = "{}api/posts/{}".format(settings.BACKEND_URL, str(post_id))
 
