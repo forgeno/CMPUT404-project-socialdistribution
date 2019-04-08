@@ -3,7 +3,8 @@
 CMPUT404-project-socialdistribution
 ===================================
 
-Currently hosted on https://git-friends-404.herokuapp.com/
+Front-End portion of the app is currently hosted on https://git-friends-404.herokuapp.com/
+Back-End Endpoints are hosted on https://radiant-savannah-77591.herokuapp.com/admin/ 
 
 CMPUT404-project-socialdistribution
 
