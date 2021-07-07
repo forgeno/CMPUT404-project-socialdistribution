@@ -1,3 +1,4 @@
+from requests_futures.sessions import FuturesSession
 from urllib.parse import urlparse
 
 from django.db import transaction
@@ -77,6 +78,9 @@ class AuthorProfileView(generics.GenericAPIView):
                     response_data = AuthorProfileSerializer(author_profile).data
                     friends = Follow.objects.filter(authorA=response_data["id"], status="FRIENDS")
                     friends_list_data = []
+
+                    session = FuturesSession()
+                    foreign_requests = []
                     for friend in friends:
                         friend_full_id = friend.authorB
                         tmp = friend_full_id.split("author/")
@@ -89,19 +93,37 @@ class AuthorProfileView(generics.GenericAPIView):
                                 url = "{}{}author/{}".format(server_user.host, server_user.prefix, friend_short_id)
                                 headers = {'Content-type': 'application/json'}
 
-                                response = requests.get(url,
-                                                        auth=(server_user.send_username, server_user.send_password),
-                                                        headers=headers)
-                                if response.status_code == 200:
-                                    friends_list_data.append(json.loads(response.content))
+                                # response = requests.get(url,
+                                #                         auth=(server_user.send_username, server_user.send_password),
+                                #                         headers=headers)
+                                # if response.status_code == 200:
+                                #     friends_list_data.append(json.loads(response.content))
+                                print(url)
+                                foreign_requests.append(session.get(url,
+                                                                    auth=(server_user.send_username,
+                                                                          server_user.send_password),
+                                                                    headers=headers)
+                                                        )
+
                             except Exception as e:
                                 # ignore and just not add into friend list if cant get from server
+                                print("inside for loop exception")
                                 pass
-
                         else:
                             friend_profile = AuthorProfile.objects.get(id=friend_short_id)
                             serialized_author_profile = AuthorProfileSerializer(friend_profile)
                             friends_list_data.append(serialized_author_profile.data)
+
+                    for response in foreign_requests:
+                        try:
+                            result = response.result()
+                            if (result.status_code == 200):
+                                print("inside 200")
+                                print(result.json())
+                                friends_list_data.append(result.json())
+                        except:
+                            print("exception when join back author profile")
+                            pass
 
                     response_data["friends"] = friends_list_data
 

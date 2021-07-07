@@ -22,14 +22,14 @@ def valid_input(data):
         friend_valid_url = len(data["friend"]["url"]) == 0
 
         if (query_valid or
-        author_valid_id or
-        author_valid_host or
-        author_valid_displayname or
-        author_valid_url or
-        friend_valid_id or
-        friend_valid_host or
-        friend_valid_displayname or
-        friend_valid_url
+                author_valid_id or
+                author_valid_host or
+                author_valid_displayname or
+                author_valid_url or
+                friend_valid_id or
+                friend_valid_host or
+                friend_valid_displayname or
+                friend_valid_url
         ):
             return False
     except:
@@ -51,7 +51,7 @@ def valid_local_author(author_host, author_id):
 
 # function to follow or be friend
 def follow(request):
-    #print(request.data["friend"]["host"])
+    # print(request.data["friend"]["host"])
     author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
     server_user_exists = ServerUser.objects.filter(user=request.user).exists()
     parsed_url = urlparse(request.data["author"]["id"])
@@ -67,7 +67,7 @@ def follow(request):
                             status.HTTP_400_BAD_REQUEST)
         request_user_profile = AuthorProfile.objects.get(user=request.user)
         request_user_id = AuthorProfileSerializer(request_user_profile).data["id"]
-        if(request_user_id != request.data["author"]["id"]):
+        if (request_user_id != request.data["author"]["id"]):
             return Response("Follow Request Fail, cannot send friend request for other authors",
                             status.HTTP_400_BAD_REQUEST)
 
@@ -127,17 +127,17 @@ def follow(request):
         Follow.objects.get_or_create(authorA=request.data["author"]["id"],
                                      authorB=request.data["friend"]["id"],
                                      status="FOLLOWING")
-    return Response("Follow Request Success", status.HTTP_200_OK)     
+    return Response("Follow Request Success", status.HTTP_200_OK)
+
 
 def unfollow_user_update(author, friend):
-
     existing_follow = Follow.objects.filter(authorA=author,
                                             authorB=friend)
     if (existing_follow.exists()):
         if (existing_follow[0].status == "FRIENDS"):
             existing_friend = Follow.objects.get(authorA=friend,
-                                                    authorB=author,
-                                                    status="FRIENDS")
+                                                 authorB=author,
+                                                 status="FRIENDS")
             setattr(existing_friend, "status", "FOLLOWING")
             existing_friend.save()
         existing_follow.delete()
@@ -145,26 +145,25 @@ def unfollow_user_update(author, friend):
     else:
         return Response("Unfollow Request Fail", status.HTTP_400_BAD_REQUEST)
 
-def valid_foreign_author(author_host, author_id):
 
+def valid_foreign_author(author_host, author_id):
     try:
         tmp = author_id.split("author/")
         author_short_id = tmp[1]
         server_user = ServerUser.objects.get(host=author_host)
         headers = {'Content-type': 'application/json'}
         url = "{}{}author/{}".format(server_user.host, server_user.prefix, author_short_id)
-        response = requests.get(url, 
-                                auth=(server_user.send_username, 
-                                server_user.send_password), 
+        response = requests.get(url,
+                                auth=(server_user.send_username,
+                                      server_user.send_password),
                                 headers=headers)
-        if(response.status_code == 200):
+        if (response.status_code == 200):
             return True
         else:
             return False
     except:
         return False
 
-    
 
 # function to unfollow
 def unfollow(request):
@@ -179,26 +178,26 @@ def unfollow(request):
 
     if author_profile_exists:
         check_author = valid_local_author(author_host, author_id)
-        if(not check_author):
+        if (not check_author):
             return Response("Local author does not exist", status.HTTP_400_BAD_REQUEST)
 
-        if(author_host != friend_host):
-            
+        if (author_host != friend_host):
+
             check_foreign = valid_foreign_author(friend_host, friend_id)
-            if((not check_foreign) and server_user_exists):
+            if ((not check_foreign) and server_user_exists):
                 return Response("Foreign author does not exist", status.HTTP_400_BAD_REQUEST)
 
             try:
                 server_user = ServerUser.objects.get(host=friend_host)
                 headers = {'Content-type': 'application/json'}
                 url = "{}{}unfollow".format(server_user.host, server_user.prefix)
-                response = requests.post(url, 
-                                        auth=(server_user.send_username, 
-                                        server_user.send_password), 
-                                        headers=headers, 
-                                        data=json.dumps(request.data))
-                if(response.status_code == 200):
-                    return unfollow_user_update(author_id,friend_id)
+                response = requests.post(url,
+                                         auth=(server_user.send_username,
+                                               server_user.send_password),
+                                         headers=headers,
+                                         data=json.dumps(request.data))
+                if (response.status_code == 200):
+                    return unfollow_user_update(author_id, friend_id)
                 else:
                     print(response.json())
                     return Response("Error: Foreign server failed to unfollow", status.HTTP_400_BAD_REQUEST)
@@ -206,20 +205,20 @@ def unfollow(request):
                 return Response("Error: foreign server not allowed", status.HTTP_400_BAD_REQUEST)
         else:
             check_author = valid_local_author(friend_host, friend_id)
-            if(not check_author):
+            if (not check_author):
                 return Response("Local friend does not exist", status.HTTP_400_BAD_REQUEST)
-            return unfollow_user_update(author_id,friend_id)
+            return unfollow_user_update(author_id, friend_id)
 
     elif server_user_exists:
         check_author = valid_foreign_author(author_host, author_id)
-        if(not check_author):
+        if (not check_author):
             return Response("Foreign author does not exist", status.HTTP_400_BAD_REQUEST)
 
         check_friend = valid_local_author(friend_host, friend_id)
-        if(not check_friend):
+        if (not check_friend):
             return Response("Local friend does not exist", status.HTTP_400_BAD_REQUEST)
-       
-        return unfollow_user_update(author_id,friend_id)
+
+        return unfollow_user_update(author_id, friend_id)
     else:
         return Response("Failed to unfriend", status.HTTP_400_BAD_REQUEST)
 

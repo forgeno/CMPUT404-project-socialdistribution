@@ -1,3 +1,4 @@
+from requests_futures.sessions import FuturesSession
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from ..models import Follow, AuthorProfile, ServerUser
@@ -20,6 +21,10 @@ class CheckFollowersView(generics.GenericAPIView):
 
         follow_list_data = []
         print("authorid", authorid)
+
+        session = FuturesSession()
+        foreign_requests = []
+
         for follower in Follow.objects.filter(authorB=authorid, status="FOLLOWING"):
             follower_fulll_id = follower.authorA
             tmp_follower_data = follower_fulll_id.split("author/")
@@ -41,11 +46,27 @@ class CheckFollowersView(generics.GenericAPIView):
                     url = "{}{}author/{}".format(server_user.host, server_user.prefix, follower_author_profile_id)
                     print(url)
                     headers = {'Content-type': 'application/json'}
-                    response = requests.get(url,
-                                            auth=(server_user.send_username, server_user.send_password),
-                                            headers=headers)
-                    if response.status_code == 200:
-                        follow_list_data.append(json.loads(response.content))
+                    # response = requests.get(url,
+                    #                         auth=(server_user.send_username, server_user.send_password),
+                    #                         headers=headers)
+                    # if response.status_code == 200:
+                    #     follow_list_data.append(json.loads(response.content))
+
+                    foreign_requests.append(session.get(url,
+                                                        auth=(server_user.send_username,
+                                                              server_user.send_password),
+                                                        headers=headers)
+                                            )
+                    for response in foreign_requests:
+                        try:
+                            result = response.result()
+                            if (result.status_code == 200):
+                                print("inside 200")
+                                print(result.json())
+                                follow_list_data.append(result.json())
+                        except:
+                            print("exception when join back followers endpoint")
+                            pass
                 except Exception as e:
                     # ignore and just not add into follower list if cant get from server
                     print("check followers exception")

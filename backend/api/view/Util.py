@@ -1,3 +1,4 @@
+from requests_futures.sessions import FuturesSession
 from urllib.parse import urlparse
 from rest_framework.response import Response
 from ..models import AuthorProfile, Follow, Post, Comment, ServerUser
@@ -127,7 +128,11 @@ def build_post(post):
     comments = []
     if("comments" in post):
         # do stuff
-        for comment in post["comments"]:
+        session = FuturesSession()
+        foreign_requests = []
+        comments_with_foreign_author_index = []
+        for i in range(len(post["comments"])):
+            comment = post["comments"][i]
             # full_author_id = comment["author"] # http://localhost:8000/author/adfhadifnads
             parsed_post_url = urlparse(comment["author"])
             commenter_host = '{}://{}/'.format(parsed_post_url.scheme, parsed_post_url.netloc)
@@ -147,17 +152,35 @@ def build_post(post):
                         server_obj = ServerUser.objects.get(host=commenter_host)
                         url = "{}{}author/{}".format(server_obj.host, server_obj.prefix, foreign_author_id)
                         headers = {'Content-type': 'application/json'}
-                        response = requests.get(url,
-                                            auth=(server_obj.send_username, server_obj.send_password),
-                                            headers=headers
-                                            )
-                        if(response.status_code == 200):
-                            foreign_author = json.loads(response.content)
-                            comment["author"] = foreign_author
-                            comments.append(comment)
+                        # response = requests.get(url,
+                        #                     auth=(server_obj.send_username, server_obj.send_password),
+                        #                     headers=headers
+                        #                     )
+                        # if(response.status_code == 200):
+                        #     foreign_author = json.loads(response.content)
+                        #     comment["author"] = foreign_author
+                        #     comments.append(comment)
+
+                        foreign_requests.append(session.get(url,
+                                                            auth=(server_obj.send_username, server_obj.send_password),
+                                                            headers=headers)
+                                                )
+                        comments_with_foreign_author_index.append(i)
+                        comments.append(comment)
 
                     except:
                         #To do do a legit way of handling people that dont exist
                         pass
+
+        for i in range(len(foreign_requests)):
+            try:
+                response = foreign_requests[i]
+                result = response.result()
+                if (result.status_code == 200):
+                    index = comments_with_foreign_author_index[i]
+                    comments[index]["author"] = result.json()
+            except:
+                print("exception when join back public posts")
+                pass
     post["comments"] = comments
     return post

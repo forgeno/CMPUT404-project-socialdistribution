@@ -1,4 +1,4 @@
-from django.db import transaction
+from requests_futures.sessions import FuturesSession
 from rest_framework import generics
 from rest_framework import authentication, permissions, status
 from ..serializers import AuthorProfileSerializer, PostSerializer
@@ -42,16 +42,36 @@ class StreamPostsView(generics.GenericAPIView):
             friend_list_data = get_local_friends_list(user_id)
             posts = self.get_local_posts(user_id, friend_list_data)
 
+            # for server_user in ServerUser.objects.all():
+            #     headers = {'Content-type': 'application/json',
+            #                "X-Request-User-ID": user_id}
+            #     url = "{}{}author/posts".format(server_user.host, server_user.prefix)
+            #     response = requests.get(url,
+            #                             auth=(server_user.send_username, server_user.send_password),
+            #                             headers=headers)
+            #     if response.status_code == 200:
+            #         response_json = json.loads(response.content)
+            #         posts += response_json["posts"]
+
+            session = FuturesSession()
+            foreign_requests = []
             for server_user in ServerUser.objects.all():
                 headers = {'Content-type': 'application/json',
                            "X-Request-User-ID": user_id}
                 url = "{}{}author/posts".format(server_user.host, server_user.prefix)
-                response = requests.get(url,
-                                        auth=(server_user.send_username, server_user.send_password),
-                                        headers=headers)
-                if response.status_code == 200:
-                    response_json = json.loads(response.content)
-                    posts += response_json["posts"]
+                print(url)
+                foreign_requests.append(session.get(url,
+                                                    auth=(server_user.send_username, server_user.send_password),
+                                                    headers=headers)
+                                        )
+            for response in foreign_requests:
+                try:
+                    result = response.result()
+                    if(result.status_code == 200):
+                        posts += result.json()["posts"]
+                except:
+                    print("exception when join back author posts")
+                    pass
 
         elif server_user_exists:
             user_id = request.META["HTTP_X_REQUEST_USER_ID"]
