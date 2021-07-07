@@ -46,7 +46,7 @@ class CreatePostView(generics.GenericAPIView):
                 if (not AuthorProfile.objects.filter(id=author_profile_id).exists()):
                     raise ValueError("Error: User in visibleTo does not exist")
             else:
-                server_user_filter = ServerUser.objects.filter(host=author_host)
+                server_user_filter = ServerUser.objects.filter(host=author_host, disable=False)
                 if (server_user_filter.exists()):
                     foreign_server = server_user_filter[0]
                     url = "{}{}author/{}".format(foreign_server.host, foreign_server.prefix, author_profile_id)
@@ -102,7 +102,7 @@ class CreatePostView(generics.GenericAPIView):
             posts_with_comments.append(build_post(post))
 
         if(local_author):
-            for server_obj in ServerUser.objects.all():
+            for server_obj in ServerUser.objects.filter(disable=False):
                 headers = {'Content-type': 'application/json'}
                 try:
                     url = "{}{}posts".format(server_obj.host, server_obj.prefix)
@@ -129,7 +129,7 @@ class CreatePostView(generics.GenericAPIView):
 
     def get_public_post_by_id(self, request, post_id):
         author_exist = AuthorProfile.objects.filter(user=request.user).exists()
-        server_user_exist = ServerUser.objects.filter(user=request.user).exists()
+        server_user_exist = ServerUser.objects.filter(user=request.user, disable=False).exists()
 
         # print(Post.objects.filter(id=post_id).exists())
         # print(post["visibility"])
@@ -166,7 +166,7 @@ class CreatePostView(generics.GenericAPIView):
                     parsed_url = urlparse(post_id)
                     foreign_host = '{}://{}/'.format(parsed_url.scheme, parsed_url.netloc)
                     post_short_id = post_id.split("/")[-1]
-                    server_user = ServerUser.objects.get(host=foreign_host)
+                    server_user = ServerUser.objects.get(host=foreign_host, disable=False)
                     user_profile = AuthorProfile.objects.get(user=request.user)
                     headers = {'Content-type': 'application/json',
                                "X-Request-User-ID": AuthorProfileSerializer(user_profile).data["id"]}

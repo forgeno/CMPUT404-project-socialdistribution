@@ -84,7 +84,7 @@ class PostCommentsView(generics.GenericAPIView):
             return Response("Error: Payload does not match", status.HTTP_400_BAD_REQUEST)
         else:
             author_profile_filter = AuthorProfile.objects.filter(user=request.user)
-            server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+            server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
 
             if(author_profile_filter.exists()):
                 # request is from front end
@@ -108,7 +108,7 @@ class PostCommentsView(generics.GenericAPIView):
                     headers = {'Content-type': 'application/json'}
 
                     try:
-                        server_obj = ServerUser.objects.get(host=post_host)
+                        server_obj = ServerUser.objects.get(host=post_host, disable=False)
 
                         postid = postid.split("/")[-1]
 

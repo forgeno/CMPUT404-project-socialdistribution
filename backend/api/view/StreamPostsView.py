@@ -30,7 +30,7 @@ class StreamPostsView(generics.GenericAPIView):
     def get(self, request):
 
         author_profile_exists = AuthorProfile.objects.filter(user=request.user).exists()
-        server_user_exists = ServerUser.objects.filter(user=request.user).exists()
+        server_user_exists = ServerUser.objects.filter(user=request.user, disable=False).exists()
         stream = []
 
         if not (server_user_exists or author_profile_exists):
@@ -42,7 +42,7 @@ class StreamPostsView(generics.GenericAPIView):
             friend_list_data = get_local_friends_list(user_id)
             posts = self.get_local_posts(user_id, friend_list_data)
 
-            for server_user in ServerUser.objects.all():
+            for server_user in ServerUser.objects.filter(disable=False):
                 headers = {'Content-type': 'application/json',
                            "X-Request-User-ID": user_id}
                 url = "{}{}author/posts".format(server_user.host, server_user.prefix)
